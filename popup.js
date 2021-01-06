@@ -1,15 +1,17 @@
+import { langList } from './lang.js';
+
 function getTime() {
   const currentDate = new Date();
   const time = currentDate.toLocaleTimeString(); // => 13:01:42
   const welcomeMsg = document.getElementById('welcomeMsg');
   if (time >= '17:00:00') {
-    welcomeMsg.innerText = 'Goedemorgen!';
+    welcomeMsg.innerText = 'Goedemorgen ';
   } else if (time >= '12:00:00') {
-    welcomeMsg.innerText = 'Goedemiddag!';
+    welcomeMsg.innerText = 'Goedemiddag ';
   } else if (time >= '06:00:00') {
-    welcomeMsg.innerText = 'Goedeavond!';
+    welcomeMsg.innerText = 'Goedeavond ';
   } else if (time >= '00:00:00') {
-    welcomeMsg.innerText = 'Goedenacht!';
+    welcomeMsg.innerText = 'Goedenacht ';
   }
 }
 
@@ -30,10 +32,32 @@ function welcomeMessage() {
   getTime();
   getUser();
 }
-welcomeMessage();
 
-chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-  chrome.tabs.executeScript(tabs[0].id, {
-    file: 'a11y.js',
+function connectJS(file) {
+  // connect a JS file
+  chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+    chrome.tabs.executeScript(tabs[0].id, {
+      file: file,
+    });
   });
-});
+}
+
+function connectJSwithOptions(options, file) {
+  // connect a JS file with data ('options')
+  chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+    chrome.tabs.executeScript(
+      tabs[0].id,
+      {
+        code: 'const options = ' + JSON.stringify(options),
+      },
+      function () {
+        chrome.tabs.executeScript({
+          file: file,
+        });
+      }
+    );
+  });
+}
+
+welcomeMessage();
+connectJSwithOptions(langList, 'a11y.js');
