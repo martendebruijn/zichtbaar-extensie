@@ -22,12 +22,12 @@ function getElementInsidePopupById(id) {
   return document.getElementById(`zichtbaar-${id}`);
 }
 
-// --------
-
 function checkPopup() {
   const popup = getPopup();
   return popup ? true : false;
 }
+
+// --------
 
 function createPopup() {
   // prevent for creating a new one when there is already one
