@@ -4,13 +4,29 @@ console.log('a11y.js is activated'); // logs in main website console
 // const allNavs = document.querySelectorAll('nav');
 // console.log(allNavs);
 
+// UTILITY FUNCTIONS
+
 function make(element) {
   return document.createElement(element);
 }
 
+function getPopup() {
+  return document.getElementById('zichtbaar-popup');
+}
+
+function setId(element, id) {
+  return element.setAttribute('id', `zichtbaar-${id}`);
+}
+
+function getElementInsidePopupById(id) {
+  return document.getElementById(`zichtbaar-${id}`);
+}
+
+// --------
+
 function checkPopup() {
-  const div = document.getElementById('zichtbaar-popup');
-  return div ? true : false;
+  const popup = getPopup();
+  return popup ? true : false;
 }
 
 function createPopup() {
@@ -18,7 +34,7 @@ function createPopup() {
   const popupExists = checkPopup();
   if (!popupExists) {
     const div = make('div');
-    div.setAttribute('id', 'zichtbaar-popup');
+    setId(div, 'popup');
     div.style.height = '100vh';
     div.style.width = '300px';
     div.style.backgroundColor = 'rgba(170, 170, 170, .5)';
@@ -48,12 +64,12 @@ function checkLang() {
 }
 
 function notifyLang() {
-  const popup = document.getElementById('zichtbaar-popup');
+  const popup = getPopup();
   const div = make('div');
-  div.setAttribute('id', 'zichtbaar-lang');
+  setId(div, 'lang');
   popup.append(div);
 
-  const langDiv = document.getElementById('zichtbaar-lang');
+  const langDiv = getElementInsidePopupById('lang');
   const p = make('p');
   const lang = checkLang();
   p.innerText = `Deze pagina staat ingesteld in het ${lang}.`;
@@ -61,12 +77,12 @@ function notifyLang() {
 }
 
 function renderLangOptions() {
-  const popup = document.getElementById('zichtbaar-popup');
+  const popup = getPopup();
   const div = make('div');
-  div.setAttribute('id', 'zichtbaar-langOptions');
+  setId(div, 'langOptions');
   popup.append(div);
 
-  const langOptions = document.getElementById('zichtbaar-langOptions');
+  const langOptions = getElementInsidePopupById('langOptions');
   const btnEn = make('button');
   const btnNl = make('button');
   btnEn.innerText = 'Engels';
@@ -75,6 +91,10 @@ function renderLangOptions() {
   langOptions.append(btnNl);
 }
 
-createPopup();
-notifyLang();
-renderLangOptions();
+function init() {
+  createPopup();
+  notifyLang();
+  renderLangOptions();
+}
+
+init();
