@@ -14,3 +14,5 @@
 
 <!-- https://developer.chrome.com/docs/extensions/mv2/getstarted/ -->
 <!-- every page has its own console: so popup.html and options.html each have it's own console also the background.js got its own console (extentions page -> backgroundpage) -->
+
+<!-- https://www.toptal.com/software/definitive-guide-to-datetime-manipulation#:~:text=Getting%20the%20Current%20Time%20Stamp,passed%20since%20January%201%2C%201970. -->

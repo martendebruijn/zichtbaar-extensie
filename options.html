@@ -4,9 +4,18 @@
         <link rel="stylesheet" href="options.css"> 
     </head>  
     <body>    
-        <div id="buttonDiv"></div>    
         <div>      
-            <p>Choose a different background color!</p>    
+            <form action="">
+                <label for="username">Set username:</label>
+                <input type="text" name="username" id="username" required autocomplete="off" pattern="^[A-Za-z]+(?:\s[A-Za-z]+)*" placeholder="John Doe">
+                <input type="submit" value="submit">
+
+                <ul class="hints">
+                    <p>Toegestane tekens:</p>
+                    <li>a-z of A-Z</li>
+                    <li>spatie</li>
+                </ul>
+            </form>
         </div>  
     </body>  
     <script src="options.js"></script>
