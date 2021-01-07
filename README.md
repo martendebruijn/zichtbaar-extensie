@@ -1,14 +1,14 @@
 # zichtbaar-extensie
 
 <div style="display:flex;">
-  <img src="https://img.shields.io/github/license/martendebruijn/template-node-express" />
+  <img src="https://img.shields.io/github/license/martendebruijn/zichtbaar-extentie" />
 </div>
 
 ## Introduction
 This Chrome extension is part of my ([Marten de Bruijn](https://marten.work/)) graduation project of Communication Multimedia and Design @Avans university of applied science, Breda. This extension adds accessibility enhancements to websites for blind people (who can't see their screens).
 
 ## Development
-This extention is currently in development. 
+This extension is currently **in development**. 
 
 ### TODO
 
@@ -37,6 +37,11 @@ This extention is currently in development.
     - [Send code directly](#send-code-directly)
     - [Activate a file with data](#activate-a-file-with-data)
   - [Welcome message](#welcome-message)
+  - [Website language](#website-language)
+    - [Finding the current language](#finding-the-current-language)
+    - [Change the current language](#change-the-current-language)
+    - [Change which languages are displayed](#change-which-languages-are-displayed)
+  - [Quick navigation](#quick-navigation)
   - [Sources](#sources)
 
 ## Usage
@@ -118,7 +123,6 @@ chrome.runtime.onInstalled.addListener(function () {
   ...
 });
 ```
-
 
 #### On page changed
 
@@ -244,22 +248,32 @@ function getUser() {
 }
 ```
 
+## Website language
+### Finding the current language
+### Change the current language
+### Change which languages are displayed
+
+## Quick navigation
+
+
 ## Sources
 
 | Icon | Category                |
 | ---- | ----------------------- |
 | 📹   | Video                   |
 | 📖   | Documentation / Article |
-| ⚙️   | Code / Resource                    |
-| 🛠    | Tool                    |
+| ⚙️   | Code / Resource         |
+| 🛠    | Tool                   |
 
 | Cat. | Title | Author | Origin | Used for |
 | ---- | ----- | ------ | ------ | ------ |
 | 📖   | How to Build a Chrome Extention | Sarah Drasner | [CSS TRICKS](https://css-tricks.com/how-to-build-a-chrome-extension/) | This was the article that actually got me started, it's also where [Send JS code from popup to content](#Send-JS-code-from-popup-to-content) is based on. However the code in the article gave me – and others in the comment section - errors and it confuses the background and content scripts. |
 | 📖   | Chrome Developers Manifest V2 Getting started | Google | [Google Develop](https://developer.chrome.com/docs/extensions/mv2/getstarted/) | Building a first extension.
 | 📖   | The Definitive Guide to DateTime Manipulation | Punit Jajodia | [Toptal](https://www.toptal.com/software/definitive-guide-to-datetime-manipulation#:~:text=Getting%20the%20Current%20Time%20Stamp,passed%20since%20January%201,%201970) | For refreshing my memory of how date and time in JavaScript works again.
-| ⚙️   | ISO Language Codes (639-1 and 693-2) and IETF Language Types | Data Hub | [Data Hub](https://datahub.io/core/language-codes) | `.csv` of all the land codes with correspondending English names
-| ⚙️   | Title | Author | [https://csvjson.com/](https://csvjson.com/) | used for
+| ⚙️   | ISO Language Codes (639-1 and 693-2) and IETF Language Types | Data Hub | [Data Hub](https://datahub.io/core/language-codes) | `.csv` of all the language codes with correspondending English names
+| 🛠   | Title | Author | [https://csvjson.com/](https://csvjson.com/) | used for
 | ⚙️   | Title | Author | [#](https://codyhouse.co/blog/post/accessible-language-picker)  | used for
 | ⚙️   | Title | Author | [#](https://developer.mozilla.org/en-US/) | used for
-| ⚙️   | Title | Author | [#](#) | used for
+| 🛠   | RegEx | Author | [#](#) | used for
+
+<!-- https://stackoverflow.com/questions/31111721/pass-a-variable-from-content-script-to-popup/31112456 -->
