@@ -1,9 +1,5 @@
-button {
-  height: 30px;
-  width: 30px;
-  outline: none;
-  margin-top: 15px;
-}
-button:first-of-type {
-  margin-top: 0;
+body {
+  width: 300px;
+  height: 300px;
+  overflow: scroll;
 }

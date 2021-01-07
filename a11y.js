@@ -1,9 +1,5 @@
 console.clear();
 console.log('a11y.js is activated'); // logs in main website console
-
-// const allNavs = document.querySelectorAll('nav');
-// console.log(allNavs);
-
 // UTILITY FUNCTIONS
 
 function make(element) {
@@ -35,13 +31,17 @@ function createPopup() {
   if (!popupExists) {
     const div = make('div');
     setId(div, 'popup');
-    div.style.height = '100vh';
-    div.style.width = '300px';
-    div.style.backgroundColor = 'rgba(170, 170, 170, .5)';
+    div.style.height = '25vh';
+    document.body.style.paddingBottom = '25vh';
+    div.style.width = '100%';
+    div.style.backgroundColor = 'rgba(170, 170, 170, .8)';
     div.style.position = 'fixed';
-    div.style.top = '0';
+    div.style.bottom = '0';
     div.style.left = '0';
     div.style.zIndex = '99999999';
+    div.style.overflow = 'hidden';
+    div.style.padding = '15px';
+    div.style.boxSizing = 'border-box';
     document.body.append(div);
   }
 }
@@ -111,7 +111,7 @@ function createFavoriteLang() {
     btn.innerText = lang.full;
     btn.value = lang.short;
     btn.addEventListener('click', function (e) {
-      console.log('you pressed a btn');
+      // console.log('you pressed a btn');
       // change html lang
       const chosenLang = e.target.value;
       htmlTag.setAttribute('lang', chosenLang);
@@ -124,10 +124,13 @@ function createFavoriteLang() {
   });
 }
 
+// Explanation how to send variables from content script to popup
+// https://stackoverflow.com/questions/31111721/pass-a-variable-from-content-script-to-popup/31112456
+
 function init() {
   createPopup();
   notifyLang();
   createFavoriteLang();
 }
 
-init();
+// init();
