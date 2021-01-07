@@ -41,6 +41,7 @@ function createPopup() {
     div.style.position = 'fixed';
     div.style.top = '0';
     div.style.left = '0';
+    div.style.zIndex = '99999999';
     document.body.append(div);
   }
 }
@@ -55,7 +56,8 @@ function checkLang() {
   // language array = options
   const langShort = getLang();
   var langFull;
-  options.forEach((langObj) => {
+  console.log(options);
+  options['langList'].forEach((langObj) => {
     if (langShort === langObj.alpha2) {
       langFull = langObj.English;
     }
@@ -91,10 +93,34 @@ function renderLangOptions() {
   langOptions.append(btnNl);
 }
 
+function createFavoriteLang() {
+  const popup = getPopup();
+  const div = make('div');
+  setId(div, 'langFavorites');
+  popup.append(div);
+
+  const langFavElement = getElementInsidePopupById('langFavorites');
+  const title = make('h2');
+  title.innerText = 'Favoriete talen';
+  langFavElement.append(title);
+
+  options['langFav'].forEach(function (lang) {
+    const btn = make('button');
+    btn.setAttribute('type', 'button');
+    btn.innerText = lang.full;
+    btn.addEventListener('click', function (e) {
+      console.log('you pressed a btn');
+      // change html lang
+      // change lang in popup
+    });
+    langFavElement.append(btn);
+  });
+}
+
 function init() {
   createPopup();
   notifyLang();
-  renderLangOptions();
+  createFavoriteLang();
 }
 
 init();

@@ -59,5 +59,11 @@ function connectJSwithOptions(options, file) {
   });
 }
 
+chrome.storage.sync.get('langFav', function (data) {
+  connectJSwithOptions(
+    { langList: langList, langFav: data.langFav },
+    'a11y.js'
+  );
+});
+
 welcomeMessage();
-connectJSwithOptions(langList, 'a11y.js');

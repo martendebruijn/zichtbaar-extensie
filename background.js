@@ -7,6 +7,13 @@ chrome.runtime.onInstalled.addListener(function () {
     }
   });
 
+  chrome.storage.sync.set({
+    langFav: [
+      { short: 'nl', full: 'Nederlands' },
+      { short: 'en', full: 'Engels' },
+    ],
+  });
+
   chrome.declarativeContent.onPageChanged.removeRules(undefined, function () {
     chrome.declarativeContent.onPageChanged.addRules([
       {

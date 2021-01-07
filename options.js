@@ -1,5 +1,5 @@
 function changeUsername() {
-  const form = document.querySelector('form');
+  const form = document.getElementById('username-form');
   const usernameInput = document.getElementById('username');
   form.addEventListener('submit', function (e) {
     e.preventDefault();
@@ -10,10 +10,16 @@ function changeUsername() {
 }
 changeUsername();
 
-// function validateUsername(username) {
-//   const pattern = /^[A-Za-z]+(?:\s[A-Za-z]+)*/gm;
-//   const valid = pattern.test(username);
-//   if (!valid) {
-//     // not valid
-//   }
-// }
+function favoriteLanguages() {
+  const form = document.getElementById('language-form');
+  const checkboxes = document.querySelectorAll(
+    '#language-form input[type="checkbox"]'
+  );
+  console.log(checkboxes);
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    checkboxes.forEach((checkbox) => console.log(checkbox.checked));
+  });
+}
+
+favoriteLanguages();
