@@ -7,9 +7,18 @@
 ## Introduction
 This Chrome extension is part of my ([Marten de Bruijn](https://marten.work/)) graduation project of Communication Multimedia and Design @Avans university of applied science, Breda. This extension adds accessibility enhancements to websites for blind people (who can't see their screens).
 
+## Development
+This extention is currently in development. 
+
+### TODO
+
+- [ ] Fix welcome function (goodnight isn't possible in the current structure) 
+
 ## Table of contents
 - [zichtbaar-extensie](#zichtbaar-extensie)
   - [Introduction](#introduction)
+  - [Development](#development)
+    - [TODO](#todo)
   - [Table of contents](#table-of-contents)
   - [Usage](#usage)
   - [How to make a Chrome extension](#how-to-make-a-chrome-extension)
@@ -21,7 +30,7 @@ This Chrome extension is part of my ([Marten de Bruijn](https://marten.work/)) g
       - [On page changed](#on-page-changed)
     - [Popup page](#popup-page)
     - [Options page](#options-page)
-    - [Development](#development)
+    - [Development](#development-1)
       - [Logging](#logging)
   - [Send JS code from popup to content](#send-js-code-from-popup-to-content)
     - [Activate a separate file](#activate-a-separate-file)
@@ -48,6 +57,7 @@ git clone https://github.com/martendebruijn/zichtbaar-extentie.git
 Firstly I had to find out how you make an extension in the first place. The base of every extension is the manifest. Inside the manifest, you will find all the important details of the extension. 
 
 #### Example of a manifest:
+I've used version 2 of the manifest. 
 
 ```json
 {
@@ -96,6 +106,8 @@ Firstly I had to find out how you make an extension in the first place. The base
 | (Inside `browser_action`) `default_title`      | text that is visible when the user hovers over the extension |
 | (Inside `browser_action`) `default_popup`      | link to the popup page |
 | (Inside `browser_action`) `default_icon`      | an object with the icons Chrome needs to use (16, 32 and 128px are needed) |
+
+There are many more keys you can use. These can be found in the Google documentation.
 
 ### Background script
 All tasks that have to run in the background go inside the background script. You can inspect the background page by clicking on ‘Inspect views background page’ in the manage extensions page.
@@ -243,7 +255,7 @@ function getUser() {
 
 | Cat. | Title | Author | Origin | Used for |
 | ---- | ----- | ------ | ------ | ------ |
-| 📖   | How to Build a Chrome Extention | Sarah Drasner | [CSS TRICKS](https://css-tricks.com/how-to-build-a-chrome-extension/) | This was the article that actually got me started, it's also where [Send JS code from popup to content](Send-JS-code-from-popup-to-content) is based on. However the code in the article gave me – and others in the comment section - errors and it confuses the background and content scripts. |
+| 📖   | How to Build a Chrome Extention | Sarah Drasner | [CSS TRICKS](https://css-tricks.com/how-to-build-a-chrome-extension/) | This was the article that actually got me started, it's also where [Send JS code from popup to content](#Send-JS-code-from-popup-to-content) is based on. However the code in the article gave me – and others in the comment section - errors and it confuses the background and content scripts. |
 | 📖   | Chrome Developers Manifest V2 Getting started | Google | [Google Develop](https://developer.chrome.com/docs/extensions/mv2/getstarted/) | Building a first extension.
 | 📖   | The Definitive Guide to DateTime Manipulation | Punit Jajodia | [Toptal](https://www.toptal.com/software/definitive-guide-to-datetime-manipulation#:~:text=Getting%20the%20Current%20Time%20Stamp,passed%20since%20January%201,%201970) | For refreshing my memory of how date and time in JavaScript works again.
 | ⚙️   | ISO Language Codes (639-1 and 693-2) and IETF Language Types | Data Hub | [Data Hub](https://datahub.io/core/language-codes) | `.csv` of all the land codes with correspondending English names
