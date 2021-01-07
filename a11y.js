@@ -56,7 +56,7 @@ function checkLang() {
   // language array = options
   const langShort = getLang();
   var langFull;
-  console.log(options);
+  // console.log(options);
   options['langList'].forEach((langObj) => {
     if (langShort === langObj.alpha2) {
       langFull = langObj.English;
@@ -94,6 +94,7 @@ function renderLangOptions() {
 }
 
 function createFavoriteLang() {
+  const htmlTag = document.querySelector('html');
   const popup = getPopup();
   const div = make('div');
   setId(div, 'langFavorites');
@@ -108,10 +109,16 @@ function createFavoriteLang() {
     const btn = make('button');
     btn.setAttribute('type', 'button');
     btn.innerText = lang.full;
+    btn.value = lang.short;
     btn.addEventListener('click', function (e) {
       console.log('you pressed a btn');
       // change html lang
+      const chosenLang = e.target.value;
+      htmlTag.setAttribute('lang', chosenLang);
+      console.log('HTML language is changed to ' + chosenLang);
       // change lang in popup
+      const msg = document.querySelector('#zichtbaar-lang > p');
+      msg.innerText = `De taal van deze pagina is gewijzigd naar ${chosenLang}.`;
     });
     langFavElement.append(btn);
   });
