@@ -133,4 +133,4 @@ function init() {
   createFavoriteLang();
 }
 
-// init();
+init();
