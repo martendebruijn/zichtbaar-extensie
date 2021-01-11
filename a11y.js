@@ -134,3 +134,8 @@ function init() {
 }
 
 // init();
+function tijdelijk() {
+  const language = checkLang();
+  console.log(language);
+}
+tijdelijk();
