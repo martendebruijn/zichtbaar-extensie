@@ -3,6 +3,7 @@ const setDOMInfo = (info) => {
   document.getElementById('total').textContent = info.total;
   document.getElementById('inputs').textContent = info.inputs;
   document.getElementById('buttons').textContent = info.buttons;
+  document.getElementById('language').textContent = info.language;
 };
 
 // Once the DOM is ready...

@@ -12,7 +12,7 @@
     "content_scripts": [
         {
             "matches": [
-                "https://www.google.com/*"
+                "<all_urls>"
             ],
             "js": [
                 "content.js"
@@ -37,5 +37,9 @@
             "192": "icons/android-icon-192x192.png"
         },
         "default_popup": "popup.html"
-    }
+    },
+    "permissions": [
+        "tabs",
+        "<all_urls>"
+    ]
 }

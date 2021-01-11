@@ -5,6 +5,12 @@ chrome.runtime.sendMessage({
   subject: 'showPageAction',
 });
 
+function getLang() {
+  const htmlTag = document.querySelector('html');
+  const lang = htmlTag.getAttribute('lang');
+  return lang;
+}
+
 // Listen for messages from the popup.
 chrome.runtime.onMessage.addListener((msg, sender, response) => {
   // First, validate the message's structure.
@@ -16,6 +22,7 @@ chrome.runtime.onMessage.addListener((msg, sender, response) => {
       total: document.querySelectorAll('*').length,
       inputs: document.querySelectorAll('input').length,
       buttons: document.querySelectorAll('button').length,
+      language: getLang(),
     };
 
     // Directly respond to the sender (popup),
