@@ -1,5 +1,58 @@
 body {
   width: 300px;
   height: 300px;
-  overflow: scroll;
+  font-family: 'Roboto', sans-serif;
+  padding: 15px 0;
+  color: #222831;
+  background: #f5f4f4;
+  font-weight: 400;
+}
+img.icon {
+  /* the originally icons have to be the same size */
+  width: 19px;
+}
+img.icon-arrow-right {
+  width: 15px;
+}
+h1 {
+  font-size: large;
+  font-weight: 700;
+  padding: 0 15px 7px 15px;
+  border-bottom: solid 2.5px;
+  letter-spacing: 1.8px;
+}
+details,
+summary {
+  transition: all 0.2s ease;
+}
+details:hover summary,
+details[open] {
+  background: #cdc9c3;
+}
+details[open] summary {
+  font-weight: 500;
+}
+summary {
+  display: flex;
+  align-items: center;
+  height: 39px;
+  padding: 7px 15px;
+  cursor: pointer;
+}
+summary::-webkit-details-marker {
+  position: absolute;
+  right: 15px;
+  margin: 0;
+}
+details:focus,
+summary:focus {
+  outline: none !important;
+  /* outline: -webkit-focus-ring-color dashed 1.5px; */
+  /* outline-offset: 3px; */
+}
+.nav-icon-padding {
+  padding-right: 20px;
+}
+summary + div {
+  padding: 15px;
 }
