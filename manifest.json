@@ -1,24 +1,26 @@
 {
     "manifest_version": 2,
-    "name": "Zichtbaar.net",
-    "version": "1.0.0",
-    "description": "This is a sample description",
-    "short_name": "Zichtbaar",
-    "permissions": [
-        "activeTab",
-        "declarativeContent",
-        "storage"
-    ],
+    "name": "Test Extension",
+    "version": "1.0",
+    "offline_enabled": true,
     "background": {
+        "persistent": false,
         "scripts": [
             "background.js"
-        ],
-        "persistent": false
+        ]
     },
-    "options_page": "options.html",
-    "browser_action": {
-        "default_title": "Does a thing when you do a thing",
-        "default_popup": "popup.html",
+    "content_scripts": [
+        {
+            "matches": [
+                "https://www.google.com/*"
+            ],
+            "js": [
+                "content.js"
+            ]
+        }
+    ],
+    "page_action": {
+        "default_title": "Test Extension",
         "default_icon": {
             "16": "icons/favicon-16x16.png",
             "32": "icons/favicon-32x32.png",
@@ -33,6 +35,7 @@
             "152": "icons/apple-icon-152x152.png",
             "180": "icons/apple-icon-180x180.png",
             "192": "icons/android-icon-192x192.png"
-        }
+        },
+        "default_popup": "popup.html"
     }
 }

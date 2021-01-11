@@ -1,71 +1,27 @@
-import { langList } from './lang.js';
+// Update the relevant fields with the new data.
+const setDOMInfo = (info) => {
+  document.getElementById('total').textContent = info.total;
+  document.getElementById('inputs').textContent = info.inputs;
+  document.getElementById('buttons').textContent = info.buttons;
+};
 
-function getTime() {
-  const currentDate = new Date();
-  const time = currentDate.toLocaleTimeString(); // => 13:01:42
-  const welcomeMsg = document.getElementById('welcomeMsg');
-  if (time >= '17:00:00') {
-    welcomeMsg.innerText = 'Goedemorgen ';
-  } else if (time >= '12:00:00') {
-    welcomeMsg.innerText = 'Goedemiddag ';
-  } else if (time >= '06:00:00') {
-    welcomeMsg.innerText = 'Goedeavond ';
-  } else if (time >= '00:00:00') {
-    welcomeMsg.innerText = 'Goedenacht ';
-  }
-}
-
-function getUser() {
-  const username = document.getElementById('userName');
-  chrome.storage.sync.get('user', function (data) {
-    // gets username
-    if (data.user) {
-      // if username exist do:
-      username.innerText = data.user; // insert username in popup
-    } else {
-      username.remove(); // if username doesn't exist (null) => remove span#userName
+// Once the DOM is ready...
+window.addEventListener('DOMContentLoaded', () => {
+  // ...query for the active tab...
+  chrome.tabs.query(
+    {
+      active: true,
+      currentWindow: true,
+    },
+    (tabs) => {
+      // ...and send a request for the DOM info...
+      chrome.tabs.sendMessage(
+        tabs[0].id,
+        { from: 'popup', subject: 'DOMInfo' },
+        // ...also specifying a callback to be called
+        //    from the receiving end (content script).
+        setDOMInfo
+      );
     }
-  });
-}
-
-function welcomeMessage() {
-  getTime();
-  getUser();
-}
-
-function connectJS(file) {
-  // connect a JS file
-  chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-    chrome.tabs.executeScript(tabs[0].id, {
-      file: file,
-    });
-  });
-}
-
-function connectJSwithOptions(options, file) {
-  // connect a JS file with data ('options')
-  chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-    chrome.tabs.executeScript(
-      tabs[0].id,
-      {
-        code: 'const options = ' + JSON.stringify(options),
-      },
-      function () {
-        chrome.tabs.executeScript({
-          file: file,
-        });
-      }
-    );
-  });
-}
-
-chrome.storage.sync.get('langFav', function (data) {
-  connectJSwithOptions(
-    { langList: langList, langFav: data.langFav },
-    'a11y.js'
   );
 });
-
-welcomeMessage();
-
-// ----
