@@ -27,6 +27,3 @@ chrome.runtime.onInstalled.addListener(function () {
     ]);
   });
 });
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if (request.message === 'hi') sendResponse({ message: 'hi to you' });
-});
