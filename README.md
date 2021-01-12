@@ -32,10 +32,6 @@ This extension is currently **in development**.
     - [Options page](#options-page)
     - [Development](#development-1)
       - [Logging](#logging)
-  - [Send JS code from popup to content](#send-js-code-from-popup-to-content)
-    - [Activate a separate file](#activate-a-separate-file)
-    - [Send code directly](#send-code-directly)
-    - [Activate a file with data](#activate-a-file-with-data)
   - [Welcome message](#welcome-message)
   - [Website language](#website-language)
     - [Finding the current language](#finding-the-current-language)
@@ -105,50 +101,7 @@ Now you can load your extension. This can be done by clicking ‘load unpacked�
 #### Logging
 It’s very important to understand that the extension consist out multiple – and different – pages, each with its own scope (and thus console). This means you probably have to send data across the different pages. 
 
-## Send JS code from popup to content
-You can do all kind of fun stuff with the content of a webpage with your extension. To do this you will have to send code from the popup page to the webpage. You can do this either immediately by opening the popup or if you rather want to wait when the user does a specific action, you can send the code when the user presses a button for example.
-There are three – as I know of – ways to do this:
 
-1. activate a separate file
-2. send code directly
-3. activate a separate file with some data 
-   
-### Activate a separate file
-To activate a separate file you can use this function:
-```js
-function connectJS(pathToFile) {
-  chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-    chrome.tabs.executeScript(tabs[0].id, {
-      file: pathToFile,
-    });
-  });
-}
-```
-
-### Send code directly
-This can be done by changing ‘file’ to ‘code’ and put all the code inside a string. I tend to not do this because you have to put everything inside a string. That’s also why there isn’t an example of this method (however, this method is being used in the next method combined with the first one).
-
-### Activate a file with data
-To activate a separate file and send data from the popup page to the content, you can use the following (the data is called options).
-
-```js
-function connectJSwithOptions(options, pathToFile) {
-  // connect a JS file with data ('options')
-  chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-    chrome.tabs.executeScript(
-      tabs[0].id,
-      {
-        code: 'const options = ' + JSON.stringify(options),
-      },
-      function () {
-        chrome.tabs.executeScript({
-          file: file,
-        });
-      }
-    );
-  });
-}
-```
 ## Welcome message
 The user gets a greeting on the popup page. Depending on the time it will give a different greeting. 
 
@@ -205,6 +158,7 @@ function getUser() {
 | ---- | ----- | 
 | [Home](https://github.com/martendebruijn/zichtbaar-extentie/wiki) | Description |
 | [How to build an extension](https://github.com/martendebruijn/zichtbaar-extentie/wiki/how-to-extension) | Description |
+| [Send Script from popup to content](https://github.com/martendebruijn/zichtbaar-extentie/wiki/send-script-popup-to-content) | Description |
 | [Communicating between background, content and popup](https://github.com/martendebruijn/zichtbaar-extentie/wiki/communicating) | Description |
 | [Chrome APIS overview](https://github.com/martendebruijn/zichtbaar-extentie/wiki/overview) | Description |
 | [chrome.commands](https://github.com/martendebruijn/zichtbaar-extentie/wiki/chrome-api-commands) | Description |
