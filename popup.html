@@ -1,51 +1,93 @@
 <!DOCTYPE html>
-<html>  
-  <head>    
-   <link rel="stylesheet" href="popup.css"> 
-  </head>  
-  <body>    
-   <h1><span id="welcomeMsg">Welkom</span><span id="userName"></span>!</h1>
-   <div>
-     <p>Deze website is momenteel ingesteld in het <span>Nederlands</span>.</p>
-   </div>
-   
-   <div>
-     <h3>Verander de taal</h4>
-     <button>Nederlands</button>
-     <button>Engels</button>
-   </div>
-   
-   <div>
-     <h3>Ga snel naar</h3>
-     <nav>
-       <ul>
-         <li><a href="#">Menu</a></li>
-         <li><a href="#">Header</a></li>
-         <li><a href="#">Hoofdcontent</a></li>
-         <li><a href="#">Footer</a></li>
-       </ul>
-     </nav>
-   </div>
+<html lang="nl">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,shrink-to-fit=no">
+    <meta name="theme-color" content="#003">
+    <link rel="stylesheet" href="reset.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="popup.css">
+  </head>
+  <body>
+    <noscript>U moet JavaScript inschakelen om deze extensie te gebruiken.</noscript>
+    <h1>Zichtbaar</h1>
+    <nav>
+      <ul>
+        <li>
+          <details class="details-lang">
+            <summary>
+              <img class="icon nav-icon-padding" src="./popup-icons/global.svg" alt=""><div>Taal wijzigen</div>
+            </summary>
+            <div>
+              <div class="details-lang-info">
+                <div><h6>Taal</h6></div>
+                <div><p id="jsDisplayLang">N/A</p></div>
+                <div class="sr-only">
+                  <span>De taal van deze website staat momenteel ingesteld in het </span>
+                  <span id="jsSrLang">N/A</span>
+                  <span>.</span>
+                </div>
+              </div>
+              <div class="details-lang-btns">
+                <button id="btnNl" value="nl">Nederlands</button>
+                <button id="btnEn" value="en">Engels</button>
+                <button id="btnOther" value="other" disabled>Anders</button>
+              </div>
+            </div>
+          </details>
+        </li>
+        <li>
+          <details>
+            <summary>
+              <img class="icon nav-icon-padding" src="./popup-icons/flash.svg" alt=""><div>Snelle navigatie</div>
+            </summary>
+            <div>
+              <nav>
+                <ul>
+                  <li><a href="#">Link 1</a></li>
+                  <li><a href="#">Link 2</a></li>
+                  <li><a href="#">Link 3</a></li>
+                  <li><a href="#">Link 4</a></li>
+                </ul>
+              </nav>
+            </div>
+          </details>
+        </li>
 
-   <div>
-     <h3>Menu</h3>
-     <ul>
-       <li><a href="#">Menu item 1</a></li>
-       <li><a href="#">Menu item 2</a></li>
-       <li><a href="#">Menu item 3</a></li>
-       <li><a href="#">Menu item 4</a></li>
-     </ul>
-   </div>
-
-   <div>
-     <h3>Over</h3>
-     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quaerat ullam iure eos aperiam vitae labore excepturi nemo amet, exercitationem quidem, sed natus tempore. Nesciunt beatae asperiores, minus aliquid magni incidunt!</p>
-   </div>
-
-
-
-   
-    <script type="module" src="lang.js"></script>
+      </ul>
+    </nav>
+    <script type="module" src="langCodes.js"></script>
     <script type="module" src="popup.js"></script>
   </body>
-</html>
+  </html> 
+
+
+<!-- <!DOCTYPE html>
+<html>
+  <head>
+    <script type="text/javascript" src="popup.js"></script>
+  </head>
+  <body>
+    <h3 style="font-weight:bold; text-align:center;">DOM Info</h3>
+    <table border="1" cellpadding="3" style="border-collapse:collapse;">
+      <tr>
+        <td nowrap>Total number of elements:</td>
+        <td align="right"><span id="total">N/A</span></td>
+      </tr>
+      <tr>
+        <td nowrap>Number of input elements:</td>
+        <td align="right"><span id="inputs">N/A</span></td>
+      </tr>
+      <tr>
+        <td nowrap>Number of button elements:</td>
+        <td align="right"><span id="buttons">N/A</span></td>
+      </tr>
+      <tr>
+        <td nowrap>Language of the HTML:</td>
+        <td align="right"><span id="language">N/A</span></td>
+      </tr>
+    </table>
+  </body>
+</html> -->
+

@@ -1,29 +1,28 @@
-chrome.runtime.onInstalled.addListener(function () {
-  chrome.storage.sync.get('user', function (data) {
-    // set only user to null when it hasen't been changed
-    // don't know if I need this <> it could just been reset because I updated the extention
-    if (!data.user) {
-      chrome.storage.sync.set({ user: null });
-    }
-  });
+// Sending messages from background script to content script
+chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
+  if (changeInfo.status == 'complete') {
+    chrome.tabs.query({ active: true }, function (tabs) {
+      const msg = 'Hello from background 🔥';
+      chrome.tabs.sendMessage(tabs[0].id, {
+        from: 'background',
+        subject: 'inital',
+        message: msg,
+      });
+    });
+  }
+});
 
-  chrome.storage.sync.set({
-    langFav: [
-      { short: 'nl', full: 'Nederlands' },
-      { short: 'en', full: 'Engels' },
-    ],
-  });
-
-  chrome.declarativeContent.onPageChanged.removeRules(undefined, function () {
-    chrome.declarativeContent.onPageChanged.addRules([
-      {
-        conditions: [
-          new chrome.declarativeContent.PageStateMatcher({
-            pageUrl: { hostEquals: 'developer.chrome.com' },
-          }),
-        ],
-        actions: [new chrome.declarativeContent.ShowPageAction()],
-      },
-    ]);
-  });
+// Listening to messages page
+chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
+  if (msg.from === 'content' && msg.subject === 'inital') {
+    console.log(msg);
+    // Directly respond to the sender (content script)
+    sendResponse({
+      from: 'background',
+      subject: 'verification',
+      message: 'Background has received that message 🔥',
+    });
+  } else {
+    console.log(msg);
+  }
 });

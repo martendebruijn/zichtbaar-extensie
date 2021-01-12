@@ -12,7 +12,11 @@ This extension is currently **in development**.
 
 ### TODO
 
-- [ ] Fix welcome function (goodnight isn't possible in the current structure) 
+- [x] language feature
+- [ ] quick nav feature
+- [ ] add popup banner etc
+- [ ] add 128(?)px icon
+- [ ] add shortcuts
 
 ## Table of contents
 - [zichtbaar-extensie](#zichtbaar-extensie)
@@ -21,10 +25,6 @@ This extension is currently **in development**.
     - [TODO](#todo)
   - [Table of contents](#table-of-contents)
   - [Usage](#usage)
-  - [How to make a Chrome extension](#how-to-make-a-chrome-extension)
-    - [Manifest](#manifest)
-      - [Example of a manifest:](#example-of-a-manifest)
-      - [The keys](#the-keys)
     - [Background script](#background-script)
       - [On installed event](#on-installed-event)
       - [On page changed](#on-page-changed)
@@ -32,16 +32,13 @@ This extension is currently **in development**.
     - [Options page](#options-page)
     - [Development](#development-1)
       - [Logging](#logging)
-  - [Send JS code from popup to content](#send-js-code-from-popup-to-content)
-    - [Activate a separate file](#activate-a-separate-file)
-    - [Send code directly](#send-code-directly)
-    - [Activate a file with data](#activate-a-file-with-data)
   - [Welcome message](#welcome-message)
   - [Website language](#website-language)
     - [Finding the current language](#finding-the-current-language)
     - [Change the current language](#change-the-current-language)
     - [Change which languages are displayed](#change-which-languages-are-displayed)
   - [Quick navigation](#quick-navigation)
+  - [WIKI](#wiki)
   - [Sources](#sources)
 
 ## Usage
@@ -56,63 +53,6 @@ git clone https://github.com/martendebruijn/zichtbaar-extentie.git
 4. Press "Load unpacked" in the top right.
 5. Load the directory.
 6. Enjoy :)
-
-## How to make a Chrome extension
-### Manifest
-Firstly I had to find out how you make an extension in the first place. The base of every extension is the manifest. Inside the manifest, you will find all the important details of the extension. 
-
-#### Example of a manifest:
-I've used version 2 of the manifest. 
-
-```json
-{
-    "manifest_version": 2,
-    "name": "Zichtbaar.net",
-    "version": "1.0.0",
-    "description": "This is a sample description",
-    "short_name": "Zichtbaar",
-    "permissions": [
-        "activeTab",
-        "declarativeContent",
-        "storage"
-    ],
-    "background": {
-        "scripts": [
-            "background.js"
-        ],
-        "persistent": false
-    },
-    "options_page": "options.html",
-    "browser_action": {
-        "default_title": "Does a thing when you do a thing",
-        "default_popup": "popup.html",
-        "default_icon": {
-            "16": "icons/favicon-16x16.png",
-            "32": "icons/favicon-32x32.png",
-            "128": "icons/favicon-128x128.png",
-        }
-    }
-}
-
-```
-#### The keys
-
-| Key         | Description                                    |
-| ------------------ | --------------------------------------- |
-| `manifest_version` | the version of the manifest                                  |
-| `name`        | the full name of the extension                |
-| `version`      | the version of the extension |
-| `description`      | the description of the extension |
-| `short_name`      | a short name of the extension. When there is not sufficient space to display the full name, this will be displayed  |
-| `permissions`      | an array with all the permissions the extension needs |
-| `background`      | information about the background script |
-| `options_page`      | link to the options page |
-| `browser_action`      | ... |
-| (Inside `browser_action`) `default_title`      | text that is visible when the user hovers over the extension |
-| (Inside `browser_action`) `default_popup`      | link to the popup page |
-| (Inside `browser_action`) `default_icon`      | an object with the icons Chrome needs to use (16, 32 and 128px are needed) |
-
-There are many more keys you can use. These can be found in the Google documentation.
 
 ### Background script
 All tasks that have to run in the background go inside the background script. You can inspect the background page by clicking on ‘Inspect views background page’ in the manage extensions page.
@@ -161,50 +101,7 @@ Now you can load your extension. This can be done by clicking ‘load unpacked�
 #### Logging
 It’s very important to understand that the extension consist out multiple – and different – pages, each with its own scope (and thus console). This means you probably have to send data across the different pages. 
 
-## Send JS code from popup to content
-You can do all kind of fun stuff with the content of a webpage with your extension. To do this you will have to send code from the popup page to the webpage. You can do this either immediately by opening the popup or if you rather want to wait when the user does a specific action, you can send the code when the user presses a button for example.
-There are three – as I know of – ways to do this:
 
-1. activate a separate file
-2. send code directly
-3. activate a separate file with some data 
-   
-### Activate a separate file
-To activate a separate file you can use this function:
-```js
-function connectJS(pathToFile) {
-  chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-    chrome.tabs.executeScript(tabs[0].id, {
-      file: pathToFile,
-    });
-  });
-}
-```
-
-### Send code directly
-This can be done by changing ‘file’ to ‘code’ and put all the code inside a string. I tend to not do this because you have to put everything inside a string. That’s also why there isn’t an example of this method (however, this method is being used in the next method combined with the first one).
-
-### Activate a file with data
-To activate a separate file and send data from the popup page to the content, you can use the following (the data is called options).
-
-```js
-function connectJSwithOptions(options, pathToFile) {
-  // connect a JS file with data ('options')
-  chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-    chrome.tabs.executeScript(
-      tabs[0].id,
-      {
-        code: 'const options = ' + JSON.stringify(options),
-      },
-      function () {
-        chrome.tabs.executeScript({
-          file: file,
-        });
-      }
-    );
-  });
-}
-```
 ## Welcome message
 The user gets a greeting on the popup page. Depending on the time it will give a different greeting. 
 
@@ -255,6 +152,16 @@ function getUser() {
 
 ## Quick navigation
 
+
+## WIKI
+| Title | Description | 
+| ---- | ----- | 
+| [Home](https://github.com/martendebruijn/zichtbaar-extentie/wiki) | Description |
+| [How to build an extension](https://github.com/martendebruijn/zichtbaar-extentie/wiki/how-to-extension) | Description |
+| [Send Script from popup to content](https://github.com/martendebruijn/zichtbaar-extentie/wiki/send-script-popup-to-content) | Description |
+| [Communicating between background, content and popup](https://github.com/martendebruijn/zichtbaar-extentie/wiki/communicating) | Description |
+| [Chrome APIS overview](https://github.com/martendebruijn/zichtbaar-extentie/wiki/overview) | Description |
+| [chrome.commands](https://github.com/martendebruijn/zichtbaar-extentie/wiki/chrome-api-commands) | Description |
 
 ## Sources
 
