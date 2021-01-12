@@ -12,7 +12,9 @@ This extension is currently **in development**.
 
 ### TODO
 
-- [ ] Fix welcome function (goodnight isn't possible in the current structure) 
+- [ ] prevent use on pages as chrome://extensions 
+- [ ] language feature
+- [ ] quick nav feature
 
 ## Table of contents
 - [zichtbaar-extensie](#zichtbaar-extensie)

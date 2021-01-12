@@ -1,3 +1,10 @@
+// --- LANGUAGE ---
+function getLang() {
+  const htmlTag = document.querySelector('html');
+  const lang = htmlTag.getAttribute('lang');
+  return lang;
+}
+
 // --- MESSAGES ---
 // Sending msg from content script to background script
 const msg = 'Hello from content Script ⚡';
@@ -24,33 +31,19 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   if (msg.from === 'background' && msg.subject === 'inital') {
     console.log(msg);
     // Directly respond to the sender (background script)
-    // this doesn't need to be in the if ... else, but for now it's m0re clear
     sendResponse({
       from: 'content',
       subject: 'verification',
       message: 'Content script has received that message ⚡',
     });
   }
-  if (msg.from === 'popup' && msg.subject === 'lang') {
-    //   if msg == we dont have it => getLang()
+  if (msg.from === 'popup' && msg.subject === 'language') {
+    console.log(msg);
+    const lang = getLang();
+    sendResponse({
+      from: 'content',
+      subject: 'lang',
+      msg: lang,
+    });
   }
 });
-
-// --- LANGUAGE ---
-function getLang() {
-  const htmlTag = document.querySelector('html');
-  const lang = htmlTag.getAttribute('lang');
-  return lang;
-}
-// function getFullLang() {
-//   // language array = options
-//   const langShort = getLang();
-//   var langFull;
-//   // console.log(options);
-//   options['langList'].forEach((langObj) => {
-//     if (langShort === langObj.alpha2) {
-//       langFull = langObj.English;
-//     }
-//   });
-//   return langFull;
-// }
