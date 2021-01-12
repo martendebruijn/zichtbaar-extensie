@@ -1,54 +1,41 @@
-// chrome.runtime.sendMessage({
-//   from: 'content',
-//   subject: 'showPageAction',
-// });
-
-// function getLang() {
-//   const htmlTag = document.querySelector('html');
-//   const lang = htmlTag.getAttribute('lang');
-//   return lang ? lang : null;
-// }
-
-// chrome.runtime.onMessage.addListener((msg, sender, response) => {
-//   if (msg.from === 'popup' && msg.subject === 'DOMInfo') {
-//     var domInfo = {
-//       lang: getLang(),
-//     };
-
-//     response(domInfo);
-//   }
-// });
-
-// Sending messages from Content Script
+// Sending msg from content script to background script
 const msg = 'Hello from content Script ⚡';
-chrome.runtime.sendMessage({ message: msg }, function (response) {
-  console.log(response);
-});
+chrome.runtime.sendMessage(
+  { from: 'content', subject: 'inital', message: msg },
+  function (response) {
+    console.log(response);
+  }
+);
 
-// Listening to messages in Context Script
-chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-  console.log(request);
-  // Callback
-  sendResponse({ message: 'Content script has received that message ⚡' });
-});
+// // Listening to messages
+// chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
+//   console.log(msg);
+//   //   Directly respond to the sender (background script)
+//   sendResponse({ message: 'Content script has received that message ⚡' });
+// });
 
-// Listen for messages from the popup.
-chrome.runtime.onMessage.addListener((msg, sender, response) => {
-  // First, validate the message's structure.
+// Listening to messages
+chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
+  // Msg validation
   if (msg.from === 'popup' && msg.subject === 'DOMInfo') {
-    // Collect the necessary data.
-    // (For your specific requirements `document.querySelectorAll(...)`
-    //  should be equivalent to jquery's `$(...)`.)
-    // var domInfo = {
-    //   total: document.querySelectorAll('*').length,
-    //   inputs: document.querySelectorAll('input').length,
-    //   buttons: document.querySelectorAll('button').length,
-    //   language: getLang(),
-    // };
-    var domInfo = 'test';
-
-    // Directly respond to the sender (popup),
-    // through the specified callback.
-    response(domInfo);
+    // var domInfo = 'test';
+    console.log(msg);
+    // Directly respond to the sender (popup script)
+    sendResponse({
+      from: 'content',
+      subject: 'verification',
+      message: 'Content script has received that message ⚡',
+    });
+  } else if (msg.from === 'background' && msg.subject === 'inital') {
+    console.log(msg);
+    // Directly respond to the sender (background script)
+    // this doesn't need to be in the if ... else, but for now it's m0re clear
+    sendResponse({
+      from: 'content',
+      subject: 'verification',
+      message: 'Content script has received that message ⚡',
+    });
+  } else {
+    console.log(msg);
   }
 });

@@ -1,22 +1,24 @@
 const setDOMInfo = (info) => {
+  // happens in popup
   console.log('Ik heb iets gedaan');
+  console.log(info);
 };
 
-// Once the DOM is ready...
 window.addEventListener('DOMContentLoaded', () => {
-  // ...query for the active tab...
+  // Get active tab
   chrome.tabs.query(
     {
       active: true,
       currentWindow: true,
     },
     (tabs) => {
-      // ...and send a request for the DOM info...
+      const msg = 'Hello from popup ✨';
+      // send msg from popup script to content script
       chrome.tabs.sendMessage(
         tabs[0].id,
-        { from: 'popup', subject: 'DOMInfo' },
-        // ...also specifying a callback to be called
-        //    from the receiving end (content script).
+        { from: 'popup', subject: 'DOMInfo', message: msg },
+
+        // do this:
         setDOMInfo
       );
     }
