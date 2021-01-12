@@ -12,7 +12,7 @@
     "content_scripts": [
         {
             "matches": [
-                "<all_urls>"
+                "*://*/*"
             ],
             "js": [
                 "content.js"
@@ -20,7 +20,7 @@
         }
     ],
     "browser_action": {
-        "default_title": "Test Extension",
+        "default_title": "Start zichtbaar",
         "default_icon": {
             "16": "icons/favicon-16x16.png",
             "32": "icons/favicon-32x32.png",
@@ -40,7 +40,6 @@
     },
     "permissions": [
         "tabs",
-        "<all_urls>",
         "activeTab"
     ]
 }

@@ -12,9 +12,11 @@ This extension is currently **in development**.
 
 ### TODO
 
-- [ ] prevent use on pages as chrome://extensions 
-- [ ] language feature
+- [x] language feature
 - [ ] quick nav feature
+- [ ] add popup banner etc
+- [ ] add 128(?)px icon
+- [ ] add shortcuts
 
 ## Table of contents
 - [zichtbaar-extensie](#zichtbaar-extensie)
@@ -27,6 +29,11 @@ This extension is currently **in development**.
     - [Manifest](#manifest)
       - [Example of a manifest:](#example-of-a-manifest)
       - [The keys](#the-keys)
+    - [Chrome API's](#chrome-apis)
+      - [chrome.commands](#chromecommands)
+        - [Supported keys](#supported-keys)
+        - [Scope](#scope)
+        - [Summary](#summary)
     - [Background script](#background-script)
       - [On installed event](#on-installed-event)
       - [On page changed](#on-page-changed)
@@ -97,6 +104,7 @@ I've used version 2 of the manifest.
 }
 
 ```
+
 #### The keys
 
 | Key         | Description                                    |
@@ -109,12 +117,128 @@ I've used version 2 of the manifest.
 | `permissions`      | an array with all the permissions the extension needs |
 | `background`      | information about the background script |
 | `options_page`      | link to the options page |
-| `browser_action`      | ... |
+| `browser_action`      | whole browser (vs. page only `page_action`) |
 | (Inside `browser_action`) `default_title`      | text that is visible when the user hovers over the extension |
 | (Inside `browser_action`) `default_popup`      | link to the popup page |
 | (Inside `browser_action`) `default_icon`      | an object with the icons Chrome needs to use (16, 32 and 128px are needed) |
 
 There are many more keys you can use. These can be found in the Google documentation.
+
+### Chrome API's
+
+| API         | Description                                    |
+| ------------------ | --------------------------------------- |
+| `browserAction` | ...                                  |
+| `commands`        | ...                |
+| `events`      | ... |
+| `notifications`      | ... |
+| `pageAction`      | ... |
+| `storage`      | ... |
+| `tabs`      | ... |
+| `windows`      | ... |
+
+#### chrome.commands
+`"manifest_version" >= 2`
+ The commands API allows you to define specific commands, and bind them to a default key combination. Each command your extension accepts **must** be listed in the manifest as an attribute of the `'commands'` manifest key. An extension can have many commands but **only 4 suggested keys can be specified**. The user can manually add more shortcuts from the [configure commands](chrome://extensions/configureCommands) dialog. \n
+
+ ##### Supported keys
+ - `A-Z`
+ - `0-9`
+ - Comma
+ - Period
+ - Home
+ - End
+ - PageUp
+ - PageDown
+ - Space
+ - Insert
+ - Delete
+ - Arrow keys
+ - Media Keys
+   - MediaNextTrack
+   - MediaPlayPause
+   - MediaPrevTrack
+   - MediaStop
+
+All key combinations **must** include either `Ctrl` or `Alt`. Combinations that involve `Ctrl+Alt` are **not** permitted in order to avoid conflicts with the `AltGr` key. `Shift` can be used in addition to `Alt` or `Ctrl`, but is not required. Modifiers (such as `Ctrl`) can not be used in combination with the Media Keys. `Tab` is removed in Chrome `>=v33` for accessibility reasons. \n
+
+On Mac `Ctrl` is automatically converted to `CMD`. If you want `Ctrl` instead, specify `MacCtrl` under `"mac"`. Specifying `MacCtrl` under `"default"` will cause the extension to be **uninstallable**. \n
+
+On Chrome OS, you can specify `Search` as an modifier. \n
+
+Certain Chrome shortcuts always take priority over Extension Command shortcuts and can **not** be overwritten.
+
+```json
+// manifest.json 
+
+{ "commands": {    
+  "toggle-feature-foo": {      
+    "suggested_key": {        
+      "default": "Ctrl+Shift+Y",        
+      "mac": "Command+Shift+Y"      
+      },      
+      "description": "Toggle feature foo"    
+      },    "_execute_browser_action": {      
+        "suggested_key": {        
+          "windows": "Ctrl+Shift+Y",        
+          "mac": "Command+Shift+Y",        
+          "chromeos": "Ctrl+Shift+U",        
+          "linux": "Ctrl+Shift+J"      
+          }    
+          },    
+          "_execute_page_action": {      
+            "suggested_key": {        
+              "default": "Ctrl+Shift+E",        
+              "windows": "Alt+Shift+P",        
+              "mac": "Alt+Shift+P"      
+              }   
+               } 
+                }, 
+}
+```
+
+In your background page, you can bind a handler to each of the commands defined in the manifest (except for `_execute_browser_action` and `_execute_page_action`) via `onCommand.addListener`. 
+
+```js
+// background.js
+
+chrome.commands.onCommand.addListener(function(command) {  
+  console.log('Command:', command);});
+```
+
+`_execute_browser_action` and `_execute_page_action` commands are reserved for the action of opening your extension's popups. They won't normally generate events that you can handle. If you need to take action based on your popup opening, consider listening for an `onDomReady` event inside your popup's code (what I – at time of writing – already do).
+
+##### Scope
+
+By default, Commands are scoped to the Chrome browser, which means that while the browser does not have focus, the shortcut will be inactive. On desktop Chrome, Commands can instead have global scope (Chrome `>=v35`, except on Chrome OS). \n
+
+The user is free to designate any shortcut as global using the UI in chrome://extensions \ Keyboard Shortcuts, but the extension developer is limited to specifying only `Ctrl+Shift+[0..9]` as global shortcuts. This is to minimize the risk of overriding shortcuts in other applications since if, for example, Alt+P were to be allowed as global, the printing shortcut might not work in other applications.
+
+```json
+
+// manifest.json
+
+{  
+  "commands": {    
+    "toggle-feature-foo": {      
+      "suggested_key": {        
+        "default": "Ctrl+Shift+5"      
+        },      
+        "description": "Toggle feature foo",      
+        "global": true    
+        }  
+        },  
+}
+```
+
+##### Summary
+- **Types**
+  - Command
+- **Methods**
+  - getAll
+- **Events**
+  - onCommand
+
 
 ### Background script
 All tasks that have to run in the background go inside the background script. You can inspect the background page by clicking on ‘Inspect views background page’ in the manage extensions page.
