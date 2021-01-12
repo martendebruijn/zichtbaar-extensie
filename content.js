@@ -5,6 +5,11 @@ function getLang() {
   return lang;
 }
 
+function setLang(langCode) {
+  const htmlTag = document.querySelector('html');
+  htmlTag.setAttribute('lang', langCode);
+}
+
 // --- MESSAGES ---
 // Sending msg from content script to background script
 const msg = 'Hello from content Script ⚡';
@@ -45,5 +50,10 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
       subject: 'lang',
       msg: lang,
     });
+  }
+  if (msg.from === 'popup' && msg.subject === 'changeLanguageTo') {
+    console.log(msg);
+    // change lang attr
+    setLang(msg.message);
   }
 });

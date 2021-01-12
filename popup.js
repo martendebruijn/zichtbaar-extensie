@@ -91,3 +91,31 @@ window.addEventListener('DOMContentLoaded', () => {
     }
   );
 });
+
+function addLangBtnsEventListener() {
+  const langBtns = document.querySelectorAll('.details-lang-btns button');
+  langBtns.forEach((item) =>
+    item.addEventListener('click', function (e) {
+      const langCode = e.target.value;
+      console.log(langCode);
+      changeLang(langCode);
+    })
+  );
+}
+addLangBtnsEventListener();
+
+const changeLangVerification = (info) => {
+  // happens in popup
+  console.log('changeLanguageTo callback received');
+  console.log(info);
+};
+
+function changeLang(langCode) {
+  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+    chrome.tabs.sendMessage(tabs[0].id, {
+      from: 'popup',
+      subject: 'changeLanguageTo',
+      message: langCode,
+    });
+  });
+}

@@ -15,16 +15,25 @@
     <nav>
       <ul>
         <li>
-          <details>
+          <details class="details-lang">
             <summary>
               <img class="icon nav-icon-padding" src="./popup-icons/global.svg" alt=""><div>Taal wijzigen</div>
             </summary>
             <div>
-              <div><h6>Taal</h6></div>
-              <div><p id="jsDisplayLang">N/A</p></div>
-              <span class="sr-only">De taal van deze website staat momenteel ingesteld in het </span>
-              <span class="sr-only" id="jsSrLang">N/A</span>
-              <span class="sr-only">.</span>
+              <div class="details-lang-info">
+                <div><h6>Taal</h6></div>
+                <div><p id="jsDisplayLang">N/A</p></div>
+                <div class="sr-only">
+                  <span>De taal van deze website staat momenteel ingesteld in het </span>
+                  <span id="jsSrLang">N/A</span>
+                  <span>.</span>
+                </div>
+              </div>
+              <div class="details-lang-btns">
+                <button id="btnNl" value="nl">Nederlands</button>
+                <button id="btnEn" value="en">Engels</button>
+                <button id="btnOther" value="other" disabled>Anders</button>
+              </div>
             </div>
           </details>
         </li>

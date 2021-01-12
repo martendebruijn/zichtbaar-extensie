@@ -67,3 +67,16 @@ summary + div {
   height: 1px;
   overflow: hidden;
 }
+.details-lang-info {
+  display: flex;
+  justify-content: space-between;
+}
+.details-lang-info h6 {
+  font-weight: 500;
+}
+.details-lang-btns {
+  padding-top: 8px;
+}
+.details-lang-btns button {
+  cursor: pointer;
+}

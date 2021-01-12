@@ -188,7 +188,7 @@ export const langList = [
     {
       code: 'en',
       English: 'English',
-      Dutch: null,
+      Dutch: 'Engels',
     },
     {
       code: 'eo',
@@ -578,7 +578,7 @@ export const langList = [
     {
       code: 'nl',
       English: 'Dutch; Flemish',
-      Dutch: null,
+      Dutch: 'Nederlands',
     },
     {
       code: 'nn',
