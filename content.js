@@ -1,67 +1,74 @@
 // --- NAV ---
 // check if <header> exist
+// function getHeader() {
+//   const header = document.querySelector('header');
+//   // ga ervan uit dat de 1e gevonden header element, de header is van de pagina
+//   if (header) {
+//     console.log({ State: 'header found', data: header });
+//     navInHeader(header);
+//   } else {
+//     console.log({ State: 'header NOT found', data: null });
+//     filterNavs();
+//   }
+// }
+var gotHeader;
 function getHeader() {
   const header = document.querySelector('header');
-  // ga ervan uit dat de 1e gevonden header element, de header is van de pagina
   if (header) {
-    console.log({ State: 'header found', data: header });
-    navInHeader(header);
+    gotHeader = true;
+    return navInHeader(header);
   } else {
-    console.log({ State: 'header NOT found', data: null });
-    filterNavs();
+    gotHeader = false;
+    return getAllNavs();
   }
 }
-getHeader();
 
 // check if <nav> exist in <header>
+// function navInHeader(header) {
+//   const navs = header.querySelectorAll('header nav');
+//   if (navs.length > 0) {
+//     console.log({ State: 'navs found in header', data: navs });
+//   } else {
+//     console.log({ State: 'navs NOT found in header', data: null });
+//     filterNavs();
+//   }
+// }
 function navInHeader(header) {
   const navs = header.querySelectorAll('header nav');
-  if (navs.length > 0) {
-    console.log({ State: 'navs found in header', data: navs });
-  } else {
-    console.log({ State: 'navs NOT found in header', data: null });
-    filterNavs();
-  }
+  // false => ul in header
+  return navs.length > 0 ? navs : getAllNavs();
 }
 
 // check if <nav> exist outside <header>
 function getAllNavs() {
   const navs = document.querySelectorAll('nav');
   const arr = Array.from(navs);
-  return arr.length > 0 ? arr : null;
+  if (arr.length > 0) {
+    return getFooterNavs(arr);
+  } else if (gotHeader) {
+    getUlInHeader();
+  } else {
+    getAllUls();
+  }
+
+  return arr.length > 0 ? getFooterNavs(arr) : null;
 }
 
-function getFooterNavs() {
+// get Navs in Footer
+function getFooterNavs(allNavs) {
   const navsInFooter = document.querySelectorAll('footer nav');
   const arr = Array.from(navsInFooter);
-  return arr.length > 0 ? arr : null;
+  return arr.length > 0 ? filterNavs(allNavs, arr) : allNavs;
 }
 
-function filterNavs() {
-  const navs = getAllNavs();
-  if (navs) {
-    const footerNavs = getFooterNavs();
-    if (footerNavs) {
-      // https://stackoverflow.com/questions/34901593/how-to-filter-an-array-from-all-elements-of-another-array
-      const filtered = navs.filter(function (e) {
-        return this.indexOf(e) < 0;
-      }, footerNavs);
-      console.log({
-        State: 'navs found on page, filtered out footer navs',
-        data: filtered,
-      });
-    } else {
-      console.log({
-        State: 'no navs found in footer',
-        data: null,
-      });
-    }
-  } else {
-    console.log({
-      State: 'no navs found',
-      data: null,
-    });
-  }
+// filter out footer navs
+function filterNavs(allNavs, footerNavs) {
+  // https://stackoverflow.com/questions/34901593/how-to-filter-an-array-from-all-elements-of-another-array
+  const filtered = allNavs.filter(function (e) {
+    return this.indexOf(e) < 0;
+  }, footerNavs);
+  // null => give err
+  return filtered.length > 0 ? filtered : null;
 }
 
 // get footers elements
@@ -76,6 +83,33 @@ function getFooters() {
   }
 }
 
+function getAllUls() {
+  const uls = document.querySelectorAll('ul');
+  const arr = Array.from(uls);
+  // null => give error
+  return arr.length > 0 ? checkUlForLinks(arr) : null;
+}
+function getUlInHeader() {
+  const uls = document.querySelectorAll('header ul');
+  const arr = Array.from(uls);
+  return arr.length > 0 ? checkUlForLinks(arr) : getAllUls();
+}
+function checkUlForLinks(uls) {
+  const filtered = uls.filter(function (ul) {
+    const gotLinks = ul.querySelector('a');
+    if (gotLinks) {
+      return ul;
+    }
+  });
+  // null => give error
+  return filtered.length > 0 ? filtered : null;
+}
+
+function getUlInFooter() {
+  const uls = document.querySelectorAll('footer ul');
+  console.log(uls);
+}
+
 // 1. nav in header
 // checkHeader() => checkHeaderNav()
 // 2. nav outside header (and not in footer)
@@ -84,6 +118,53 @@ function getFooters() {
 // checkHeader() => checkHeaderNav() => checkHeaderLinkList()
 // 4. list outside header
 // checkHeader() => checkNav() => checkLinkList()
+function getMainNav() {
+  const header = getHeader();
+
+  console.log(header);
+}
+getMainNav();
+
+function _getMainNav() {
+  if (getHeader()) {
+    if (navInHeader()) {
+      console.log('navs in header');
+    } else {
+      if (filteredNavs()) {
+        console.log('navs found on page, filtered out footer-navs');
+      } else {
+        const uls = getUlInHeader();
+        const gotLinks = checkUlForLinks(uls);
+        if (gotLinks) {
+          console.log('Ul link list found in header');
+        } else {
+          const allUls = getAllUls();
+          const _gotLinks = checkUlForLinks(allUls);
+          if (_gotLinks) {
+            console.log('found link list on page');
+            // filter out footer ones
+          } else {
+            console.log("can't find navigation");
+          }
+        }
+      }
+    }
+  } else {
+    if (filteredNavs()) {
+      console.log('found navs on page (filtered out the ones in the footer)');
+    } else {
+      const uls = getAllUls();
+      const gotLinks = checkUlForLinks(uls);
+      if (gotLinks) {
+        console.log('found ul link list on page');
+      } else {
+        console.log("can't find navigation");
+      }
+    }
+  }
+}
+// _getMainNav();
+
 // --- LANGUAGE ---
 function getLang() {
   const htmlTag = document.querySelector('html');
