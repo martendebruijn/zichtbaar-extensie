@@ -12,8 +12,22 @@ This extension is currently **in development**.
 
 ### TODO
 
-- [x] language feature
+- [x] ~~language feature~~
 - [ ] quick nav feature
+  - [x] ~~find navigation~~
+  - [ ] Send msg from popup (which element has to have focus)
+  - [ ] focus on that element
+  - [ ] make an array/obj that contains the site structure:
+  
+  ```json
+    site: {
+      header: header,
+      navigation: nav,
+      main: main,
+      footer: footer  
+    }
+  ```
+
 - [ ] add popup banner etc
 - [ ] add 128(?)px icon
 - [ ] add shortcuts
