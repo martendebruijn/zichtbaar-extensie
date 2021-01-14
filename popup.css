@@ -1,6 +1,6 @@
 body {
   width: 300px;
-  height: 300px;
+  /* height: 300px; */
   font-family: 'Roboto', sans-serif;
   padding: 15px 0;
   color: #222831;
@@ -83,4 +83,22 @@ button {
 .tabs-ul button {
   display: flex;
   align-items: center;
+}
+.tabs-ul img {
+  width: 16px;
+}
+.tabs-ul li {
+  margin: 2px 0;
+}
+.tabs-ul li:first-of-type {
+  margin-top: 0;
+}
+.tabs-ul li:last-of-type {
+  margin-bottom: 0;
+}
+.tabs-ul button > img:first-of-type {
+  padding-right: 3px;
+}
+.tabs-ul button > img:last-of-type {
+  padding-left: 3px;
 }

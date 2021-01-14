@@ -67,17 +67,16 @@ function getLang(tabs) {
 }
 
 const setQuickNav = (info) => {
-  console.log('Setting quick nav...');
-  console.log(info);
-  // => undefined (nu.nl)
+  // just to be sure that the extension doesn't completely breaks when info = undefined:
+  if (info === null || info === undefined) {
+    info = { footer: 0, header: 0, main: 0, nav: 0 };
+    console.log(
+      'Error: Something went wrong with sending information about the page from content Script to Popup Script. (setQuickNav())'
+    );
+  }
 
-  //   footer: NodeList [footer.block-wrapper]
-  // header: null
-  // main: null
-  // nav: [nav.block-wrapper]
   const list = document.querySelector('.quicknav-ul');
-
-  //! Error handling respons: TypeError: Cannot convert undefined or null to object
+  console.log(info);
   const entries = Object.entries(info);
   entries.forEach(function (entry) {
     if (entry[1] !== null) {
@@ -237,7 +236,10 @@ function setTabInfo(tabs) {
       img.setAttribute('alt', "''");
       appendedBtn.append(img);
     } else {
-      // add placeholder
+      const placeholder = document.createElement('img');
+      placeholder.setAttribute('src', '/popup-icons/flash.svg');
+      placeholder.setAttribute('alt', "''");
+      appendedBtn.append(placeholder);
     }
 
     const titleSpan = document.createElement('span');
@@ -248,13 +250,16 @@ function setTabInfo(tabs) {
 
     if (item.muted.muted) {
       // change this to an icon with alt
-      const span = document.createElement('span');
-      span.id = `muted-${index}`;
-      appendedBtn.append(span);
-      const appendedMuted = document.getElementById(`muted-${index}`);
-      appendedMuted.innerText = 'muted';
+      const mutedIcon = document.createElement('img');
+      mutedIcon.setAttribute('src', '/popup-icons/flash.svg');
+      mutedIcon.setAttribute('alt', "'Dit tabblad is gemuted.'");
+      appendedBtn.append(mutedIcon);
     } else {
       // audio icon with alt
+      const unmutedIcon = document.createElement('img');
+      unmutedIcon.setAttribute('src', '/popup-icons/flash.svg');
+      unmutedIcon.setAttribute('alt', "'Dit tabblad mag audio afspelen.'");
+      appendedBtn.append(unmutedIcon);
     }
   });
 }

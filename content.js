@@ -213,6 +213,7 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
       pageInfo.nav = [];
     }
     if (pageInfo.header === null) {
+      console.log([].length);
       pageInfo.header = [];
     }
     if (pageInfo.main === null) {
@@ -222,10 +223,10 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
       pageInfo.footer = [];
     }
     const _pageInfo = {
-      nav: pageInfo.nav.length || null,
-      header: pageInfo.header.length || null,
-      main: pageInfo.main.length || null,
-      footer: pageInfo.footer.length || null,
+      nav: pageInfo.nav.length,
+      header: pageInfo.header.length,
+      main: pageInfo.main.length,
+      footer: pageInfo.footer.length,
     };
     sendResponse(_pageInfo);
     console.log({ pageInfo: pageInfo, _pageInfo: _pageInfo });

@@ -12,6 +12,9 @@ This extension is currently **in development**.
 
 ### TODO
 
+<details>
+<summary>To Do List</summary>
+
 - [x] ~~language feature~~
 - [ ] quick nav feature
   - [x] ~~find navigation~~
@@ -34,10 +37,13 @@ This extension is currently **in development**.
 - [x] ~~pageInfo.main gets empty nodelist instead of null (FE: nu.nl)~~ **fixed**
 - [x] ~~Language doesn't change inside the popup~~
 - [ ] tabs
-  - [ ] add placeholder favicon
-  - [ ] add muted/unmuted icon (with alt)
+  - [x] add placeholder favicon (only the icon itself)
+  - [x] add muted/unmuted icon (with alt) (only the icon itself)
   - [ ] add sort function based on the active tab
+  - [ ] let user go to tab, mute/unmute and close tabs
 - [ ] change theme colors (icon, hover etc...) to the orange color I used on the product page
+
+</details>
 
 ## Table of contents
 - [zichtbaar-extensie](#zichtbaar-extensie)
