@@ -77,6 +77,6 @@ summary + div {
 .details-lang-btns {
   padding-top: 8px;
 }
-.details-lang-btns button {
+button {
   cursor: pointer;
 }

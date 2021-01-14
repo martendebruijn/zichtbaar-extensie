@@ -15,6 +15,7 @@ This extension is currently **in development**.
 - [x] ~~language feature~~
 - [ ] quick nav feature
   - [x] ~~find navigation~~
+  - [ ] do the same thing for ols as for uls
   - [ ] Send msg from popup (which element has to have focus)
   - [ ] focus on that element
   - [ ] make an array/obj that contains the site structure:

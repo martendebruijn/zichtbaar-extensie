@@ -1,13 +1,21 @@
+let pageInfo = {
+  header: null,
+  nav: null,
+  main: null,
+  footer: null,
+};
+
 // --- NAV ---
 function getMainNav() {
   const header = document.querySelector('header');
   if (header) {
-    gotHeader = true;
-    return navInHeader(header);
+    pageInfo.header = header;
+    navInHeader(header);
   } else {
-    gotHeader = false;
-    return getAllNavs(false);
+    getAllNavs(false);
   }
+
+  return header ? navInHeader(header) : getAllNavs(false);
 }
 function navInHeader(header) {
   const navs = header.querySelectorAll('header nav');
@@ -57,13 +65,26 @@ function checkUlForLinks(uls, scopeHeader) {
   } else if (filtered.length === 0 && scopeHeader) {
     return getAllUls();
   } else if (filtered.length > 0 && !scopeHeader) {
-    return filterUl();
+    return filterUls(filtered);
+  } else {
+    return noNav();
   }
+}
+// filter out uls inside articles
+// for medium.com: filter out ul a[href="/tag/..."]
+function getArticleUls(allUls) {
+  const ulsInArticle = document.querySelectorAll('article ul');
+  const arr = Array.from(ulsInArticle);
+  return arr.length > 0 ? filterUl(allUls, arr) : allUls;
+}
+function filterUls(allUls) {
+  const filtered = getFooterUls(allUls);
+  return getArticleUls(filtered);
 }
 function getFooterUls(allUls) {
   const ulsInFooter = document.querySelectorAll('footer ul');
   const arr = Array.from(ulsInFooter);
-  return arr.length > 0 ? filterUl(ulsInFooter, arr) : allUls;
+  return arr.length > 0 ? filterUl(allUls, arr) : allUls;
 }
 function filterUl(uls, footerUls) {
   const filtered = uls.filter(function (e) {
@@ -89,14 +110,54 @@ function removeHidden() {
   }
   return mainNav;
 }
-const __nav = removeHidden();
-console.log(__nav[0]);
-__nav[0].focus();
-// .focus() only works when the element is focusable.
-//  to make a non-focusable element focusable we have to use tabindex SO =>
-// first check tabindex (why? if we want it to be focusable, it is going to be focusable)
-// add/change tabindex (tabindex = -1 , i believe?)
+function addTabIndex() {
+  const navs = removeHidden();
+  pageInfo.nav = navs;
+  console.log(navs);
+  if (navs.length >= 1) {
+    navs.forEach(function (nav) {
+      nav.setAttribute('tabindex', 0);
+    });
+  }
+}
+addTabIndex();
 
+// --- HEADER ---
+console.log(pageInfo);
+function makeHeaderFocusable() {
+  if (pageInfo.header !== null) {
+    pageInfo.header.setAttribute('tabindex', 0);
+  }
+}
+makeHeaderFocusable();
+// --- MAIN ---
+function getMain() {
+  const mains = document.querySelectorAll('main');
+  console.log(mains);
+  // filter out article ones
+  pageInfo.main = mains;
+}
+getMain();
+function makeMainFocusable() {
+  if (pageInfo.main !== null) {
+    pageInfo.main[0].setAttribute('tabindex', 0);
+  }
+}
+makeMainFocusable();
+// --- FOOTER ---
+function getFooter() {
+  const footers = document.querySelectorAll('footer');
+  console.log(footers);
+  // filter out article ones
+  pageInfo.footer = footers;
+}
+getFooter();
+function makeFooterFocusable() {
+  if (pageInfo.footer !== null) {
+    pageInfo.footer[0].setAttribute('tabindex', 0);
+  }
+}
+makeFooterFocusable();
 // --- LANGUAGE ---
 function getLang() {
   const htmlTag = document.querySelector('html');
@@ -111,13 +172,16 @@ function setLang(langCode) {
 
 // --- MESSAGES ---
 // Sending msg from content script to background script
-const msg = 'Hello from content Script ⚡';
-chrome.runtime.sendMessage(
-  { from: 'content', subject: 'inital', message: msg },
-  function (response) {
-    console.log(response);
-  }
-);
+function sendHello() {
+  const msg = 'Hello from content Script ⚡';
+  chrome.runtime.sendMessage(
+    { from: 'content', subject: 'inital', message: msg },
+    function (response) {
+      console.log(response);
+    }
+  );
+}
+sendHello();
 
 // Listening to messages
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
@@ -132,6 +196,16 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
       message: 'Content script has received that message ⚡',
     });
   }
+  if (msg.from === 'popup' && msg.subject === 'pageInfo') {
+    console.log(msg);
+    const _pageInfo = {
+      nav: pageInfo.nav.length || null,
+      header: pageInfo.header.length || null,
+      main: pageInfo.main.length || null,
+      footer: pageInfo.footer.length || null,
+    };
+    sendResponse(_pageInfo);
+  }
   if (msg.from === 'background' && msg.subject === 'inital') {
     console.log(msg);
     // Directly respond to the sender (background script)
@@ -144,6 +218,7 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   if (msg.from === 'popup' && msg.subject === 'language') {
     console.log(msg);
     const lang = getLang();
+    console.log(`lang = ${lang}`);
     sendResponse({
       from: 'content',
       subject: 'lang',
@@ -154,5 +229,20 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
     console.log(msg);
     // change lang attr
     setLang(msg.message);
+  }
+  if (msg.from === 'popup' && msg.subject === 'Focus') {
+    console.log(msg);
+    if (msg.message === 'nav') {
+      pageInfo.nav[0].focus();
+    }
+    if (msg.message === 'header') {
+      pageInfo.header.focus();
+    }
+    if (msg.message === 'main') {
+      pageInfo.main[0].focus();
+    }
+    if (msg.message === 'footer') {
+      pageInfo.footer[0].focus();
+    }
   }
 });

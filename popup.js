@@ -25,7 +25,7 @@ const showLanguage = (_lang) => {
   console.log(`Var lang = ${lang}`);
   var full;
   // happens in popup
-  if (_lang.msg) {
+  if (typeof _lang === 'object' && _lang !== null) {
     console.log(
       `Detected language (from lang attr) got this language code: ${_lang.msg}.`
     );
@@ -64,10 +64,15 @@ function getLang(tabs) {
   });
 }
 
-const setDOMInfo = (info) => {
-  // happens in popup
-  console.log('Ik heb iets gedaan');
+// const setDOMInfo = (info) => {
+//   // happens in popup
+//   console.log('Ik heb iets gedaan');
+//   console.log(info);
+// };
+const setQuickNav = (info) => {
+  console.log('Setting quick nav...');
   console.log(info);
+  // received page info = empty
 };
 
 window.addEventListener('DOMContentLoaded', () => {
@@ -83,11 +88,16 @@ window.addEventListener('DOMContentLoaded', () => {
       // send msg from popup script to content script
       chrome.tabs.sendMessage(
         tabs[0].id,
-        { from: 'popup', subject: 'DOMInfo', message: msg },
+        { from: 'popup', subject: 'DOMInfo', message: msg }
         // do this when response comes through:
-        setDOMInfo
+        // setDOMInfo
       );
       getLang(tabs); // detect language of the page
+      chrome.tabs.sendMessage(
+        tabs[0].id,
+        { from: 'popup', subject: 'pageInfo', message: 'Received page Info' },
+        setQuickNav
+      );
     }
   );
 });
@@ -118,4 +128,31 @@ function changeLang(langCode) {
       message: langCode,
     });
   });
+}
+function addQuickNavBtnsEventListeners() {
+  const quickNavBtns = document.querySelectorAll('.details-quickNav button');
+  quickNavBtns.forEach((item) =>
+    item.addEventListener('click', function (e) {
+      const value = e.target.value;
+      console.log(value);
+      sendFocusMsg(value);
+    })
+  );
+}
+addQuickNavBtnsEventListeners();
+function sendFocusMsg(msg) {
+  chrome.tabs.query(
+    {
+      active: true,
+      currentWindow: true,
+    },
+    (tabs) => {
+      // send msg from popup script to content script
+      chrome.tabs.sendMessage(tabs[0].id, {
+        from: 'popup',
+        subject: 'Focus',
+        message: msg,
+      });
+    }
+  );
 }
