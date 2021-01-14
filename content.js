@@ -99,6 +99,7 @@ function removeHidden() {
   const mainNav = getMainNav();
   let index = mainNav.length - 1;
   while (index >= 0) {
+    // check if width / height === 0 => not visible
     var style = window.getComputedStyle(mainNav[index]);
     let display = style.getPropertyValue('display'),
       visibility = style.getPropertyValue('visibility'),

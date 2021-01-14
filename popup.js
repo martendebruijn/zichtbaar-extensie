@@ -64,15 +64,28 @@ function getLang(tabs) {
   });
 }
 
-// const setDOMInfo = (info) => {
-//   // happens in popup
-//   console.log('Ik heb iets gedaan');
-//   console.log(info);
-// };
 const setQuickNav = (info) => {
   console.log('Setting quick nav...');
   console.log(info);
-  // received page info = empty
+  const list = document.querySelector('.quicknav-ul');
+  const entries = Object.entries(info);
+  entries.forEach(function (entry) {
+    if (entry[1] !== null) {
+      const listItem = document.createElement('li');
+      listItem.id = `listitem-${entry[0]}`;
+      list.append(listItem);
+      for (let index = 0; index < entry[1]; index++) {
+        const btn = document.createElement('button');
+        btn.id = `btn${entry[0]}${index + 1}`;
+        btn.setAttribute('value', entry[0]);
+        const _listItem = document.getElementById(`listitem-${entry[0]}`);
+        _listItem.append(btn);
+        const _btn = document.getElementById(`btn${entry[0]}${index + 1}`);
+        _btn.innerText = entry[0];
+      }
+    }
+  });
+  addQuickNavBtnsEventListeners();
 };
 
 window.addEventListener('DOMContentLoaded', () => {
@@ -139,7 +152,7 @@ function addQuickNavBtnsEventListeners() {
     })
   );
 }
-addQuickNavBtnsEventListeners();
+// addQuickNavBtnsEventListeners();
 function sendFocusMsg(msg) {
   chrome.tabs.query(
     {
