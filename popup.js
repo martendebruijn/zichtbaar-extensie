@@ -208,7 +208,7 @@ function getTabs() {
         active: tab.active || null,
         favIcon: tab.favIconUrl || null,
         id: tab.id || null,
-        index: tab.index || null,
+        index: tab.index,
         muted: tab.mutedInfo || null,
         audible: tab.audible || null,
       };
@@ -218,6 +218,24 @@ function getTabs() {
 }
 function setTabInfo(tabs) {
   const resultEl = document.querySelector('.tabs-ul');
+  const startingTab = tabs.filter(function (tab) {
+    return tab.active === true;
+  });
+  const startingIndex = startingTab[0].index;
+  let amountSorted = 0;
+  for (let index = startingIndex; index < tabs.length; index++) {
+    console.log(tabs[index]);
+    tabs[index].position = index - startingIndex;
+    amountSorted++;
+  }
+  if (startingIndex !== 0 && startingIndex !== tabs.length - 1) {
+    for (let index = 0; index < startingIndex; index++) {
+      tabs[index].position = amountSorted;
+    }
+  }
+  tabs.sort((a, b) => {
+    return a.position - b.position;
+  });
   tabs.forEach(function (item, index) {
     const listItem = document.createElement('li');
     listItem.id = `tabs-list-item-${index}`;
@@ -227,6 +245,7 @@ function setTabInfo(tabs) {
     const resultListItem = document.getElementById(`tabs-list-item-${index}`);
     resultListItem.append(btn);
     const appendedBtn = document.getElementById(`tabs-btn-${index}`);
+
     // we want: icon <> title <> muted
     // so we will append icon first, then title, and lastly muted
 

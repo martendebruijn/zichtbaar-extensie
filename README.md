@@ -39,7 +39,7 @@ This extension is currently **in development**.
 - [ ] tabs
   - [x] add placeholder favicon (only the icon itself)
   - [x] add muted/unmuted icon (with alt) (only the icon itself)
-  - [ ] add sort function based on the active tab
+  - [x] add sort function based on the active tab
   - [ ] let user go to tab, mute/unmute and close tabs
 - [ ] change theme colors (icon, hover etc...) to the orange color I used on the product page
 
