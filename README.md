@@ -16,11 +16,11 @@ This extension is currently **in development**.
 - [ ] quick nav feature
   - [x] ~~find navigation~~
   - [ ] do the same thing for ols as for uls
-  - [ ] Send msg from popup (which element has to have focus)
-  - [ ] focus on that element
-  - [ ] make an array/obj that contains the site structure:
+  - [x] ~~Send msg from popup (which element has to have focus)~~
+  - [x] ~~focus on that element~~
+  - [x] ~~make an array/obj that contains the site structure:~~
   
-  ```json
+  ```js
     site: {
       header: header,
       navigation: nav,
@@ -28,10 +28,11 @@ This extension is currently **in development**.
       footer: footer  
     }
   ```
-
 - [ ] add popup banner etc
 - [ ] add 128(?)px icon
 - [ ] add shortcuts
+- [x] ~~pageInfo.main gets empty nodelist instead of null (FE: nu.nl)~~ **fixed**
+- [x] ~~Language doesn't change inside the popup~~
 
 ## Table of contents
 - [zichtbaar-extensie](#zichtbaar-extensie)

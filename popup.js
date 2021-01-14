@@ -36,6 +36,8 @@ const showLanguage = (_lang) => {
     );
     full = getFullLang(_lang);
   }
+  console.log(full);
+  console.log('asidjklaslk');
   full
     ? setLanguage(full)
     : console.log('Error: no lang found (in showLanguage() in popup.js)');
@@ -67,7 +69,15 @@ function getLang(tabs) {
 const setQuickNav = (info) => {
   console.log('Setting quick nav...');
   console.log(info);
+  // => undefined (nu.nl)
+
+  //   footer: NodeList [footer.block-wrapper]
+  // header: null
+  // main: null
+  // nav: [nav.block-wrapper]
   const list = document.querySelector('.quicknav-ul');
+
+  //! Error handling respons: TypeError: Cannot convert undefined or null to object
   const entries = Object.entries(info);
   entries.forEach(function (entry) {
     if (entry[1] !== null) {
@@ -81,7 +91,18 @@ const setQuickNav = (info) => {
         const _listItem = document.getElementById(`listitem-${entry[0]}`);
         _listItem.append(btn);
         const _btn = document.getElementById(`btn${entry[0]}${index + 1}`);
-        _btn.innerText = entry[0];
+        if (entry[0] === 'nav') {
+          _btn.innerText = `Menu ${index + 1}`;
+        }
+        if (entry[0] === 'header') {
+          _btn.innerText = 'Header';
+        }
+        if (entry[0] === 'main') {
+          _btn.innerText = 'Hoofdgedeelte';
+        }
+        if (entry[0] === 'footer') {
+          _btn.innerText = `Footer`;
+        }
       }
     }
   });
@@ -99,12 +120,11 @@ window.addEventListener('DOMContentLoaded', () => {
     (tabs) => {
       const msg = 'Hello from popup ✨';
       // send msg from popup script to content script
-      chrome.tabs.sendMessage(
-        tabs[0].id,
-        { from: 'popup', subject: 'DOMInfo', message: msg }
-        // do this when response comes through:
-        // setDOMInfo
-      );
+      chrome.tabs.sendMessage(tabs[0].id, {
+        from: 'popup',
+        subject: 'DOMInfo',
+        message: msg,
+      });
       getLang(tabs); // detect language of the page
       chrome.tabs.sendMessage(
         tabs[0].id,
@@ -141,6 +161,7 @@ function changeLang(langCode) {
       message: langCode,
     });
   });
+  showLanguage(langCode);
 }
 function addQuickNavBtnsEventListeners() {
   const quickNavBtns = document.querySelectorAll('.details-quickNav button');
@@ -152,7 +173,6 @@ function addQuickNavBtnsEventListeners() {
     })
   );
 }
-// addQuickNavBtnsEventListeners();
 function sendFocusMsg(msg) {
   chrome.tabs.query(
     {

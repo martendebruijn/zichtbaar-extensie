@@ -136,7 +136,9 @@ function getMain() {
   const mains = document.querySelectorAll('main');
   console.log(mains);
   // filter out article ones
-  pageInfo.main = mains;
+  if (mains.length >= 1) {
+    pageInfo.main = mains;
+  }
 }
 getMain();
 function makeMainFocusable() {
@@ -159,6 +161,13 @@ function makeFooterFocusable() {
   }
 }
 makeFooterFocusable();
+
+// --- ARTICLES ---
+function getArticles() {
+  const articles = document.querySelectorAll('article');
+  console.log(articles);
+}
+getArticles();
 // --- LANGUAGE ---
 function getLang() {
   const htmlTag = document.querySelector('html');
@@ -199,6 +208,19 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   }
   if (msg.from === 'popup' && msg.subject === 'pageInfo') {
     console.log(msg);
+    // cannot read property length of null (this works, but is ugly => refactor)
+    if (pageInfo.nav === null) {
+      pageInfo.nav = [];
+    }
+    if (pageInfo.header === null) {
+      pageInfo.header = [];
+    }
+    if (pageInfo.main === null) {
+      pageInfo.main = [];
+    }
+    if (pageInfo.footer === null) {
+      pageInfo.footer = [];
+    }
     const _pageInfo = {
       nav: pageInfo.nav.length || null,
       header: pageInfo.header.length || null,
@@ -206,6 +228,7 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
       footer: pageInfo.footer.length || null,
     };
     sendResponse(_pageInfo);
+    console.log({ pageInfo: pageInfo, _pageInfo: _pageInfo });
   }
   if (msg.from === 'background' && msg.subject === 'inital') {
     console.log(msg);
