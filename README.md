@@ -41,7 +41,9 @@ This extension is currently **in development**.
   - [x] add muted/unmuted icon (with alt) (only the icon itself)
   - [x] add sort function based on the active tab
   - [ ] let user go to tab, mute/unmute and close tabs
-- [ ] change theme colors (icon, hover etc...) to the orange color I used on the product page
+- [x] change theme colors (icon, hover etc...) to the orange color I used on the product page
+- [ ] hide items when they are empty
+- [ ] test with screenreader
 
 </details>
 
