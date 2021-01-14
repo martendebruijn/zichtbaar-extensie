@@ -156,7 +156,7 @@ function getFooter() {
 }
 getFooter();
 function makeFooterFocusable() {
-  if (pageInfo.footer !== null) {
+  if (pageInfo.footer.length > 0) {
     pageInfo.footer[0].setAttribute('tabindex', 0);
   }
 }
