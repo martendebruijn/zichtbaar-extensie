@@ -189,3 +189,91 @@ function sendFocusMsg(msg) {
     }
   );
 }
+// chrome.tabs.query({ windowId: chrome.windows.WINDOW_ID_CURRENT }, (tabs) => {
+//   console.log(tabs);
+//   document.write(`<h3>The tabs you're on are:</h3>`);
+//   document.write('<ul>');
+//   for (let i = 0; i < tabs.length; i++) {
+//     document.write(`<li>${tabs[i].url}</li>`);
+//   }
+//   document.write('</ul>');
+// });
+
+function getTabs() {
+  chrome.tabs.query({ windowId: chrome.windows.WINDOW_ID_Current }, (tabs) => {
+    console.log(tabs);
+    const filtered = tabs.map(function (tab) {
+      return {
+        title: tab.title || null,
+        url: tab.url || null,
+        active: tab.active || null,
+        favIcon: tab.favIconUrl || null,
+        id: tab.id || null,
+        index: tab.index || null,
+        muted: tab.mutedInfo || null,
+        audible: tab.audible || null,
+      };
+    });
+    setTabInfo(filtered);
+  });
+}
+function setTabInfo(tabs) {
+  const resultEl = document.querySelector('.tabs-ul');
+  tabs.forEach(function (item, index) {
+    const listItem = document.createElement('li');
+    listItem.id = `tabs-list-item-${index}`;
+    resultEl.append(listItem);
+    const btn = document.createElement('button');
+    btn.id = `tabs-btn-${index}`;
+    const resultListItem = document.getElementById(`tabs-list-item-${index}`);
+    resultListItem.append(btn);
+    const appendedBtn = document.getElementById(`tabs-btn-${index}`);
+    // we want: icon <> title <> muted
+    // so we will append icon first, then title, and lastly muted
+
+    if (item.favIcon !== null) {
+      const img = document.createElement('img');
+      img.setAttribute('src', item.favIcon);
+      img.setAttribute('alt', "''");
+      appendedBtn.append(img);
+    } else {
+      // add placeholder
+    }
+
+    const titleSpan = document.createElement('span');
+    titleSpan.id = `tab-title-${index}`;
+    appendedBtn.append(titleSpan);
+    const appendedTitle = document.getElementById(`tab-title-${index}`);
+    appendedTitle.innerText = item.title;
+
+    if (item.muted.muted) {
+      // change this to an icon with alt
+      const span = document.createElement('span');
+      span.id = `muted-${index}`;
+      appendedBtn.append(span);
+      const appendedMuted = document.getElementById(`muted-${index}`);
+      appendedMuted.innerText = 'muted';
+    } else {
+      // audio icon with alt
+    }
+  });
+}
+getTabs();
+// active: true
+// audible: false
+// autoDiscardable: true
+// discarded: false
+// favIconUrl: "https://www.blokker.nl/on/demandware.static/Sites-blokker-nl-Site/-/default/dwc2dbeef3/images/favicon/favicon.ico"
+// height: 689
+// highlighted: true
+// id: 256
+// incognito: false
+// index: 3
+// mutedInfo: {muted: false}
+// pinned: false
+// selected: true
+// status: "complete"
+// title: "Welkom bij Blokker, de huishoudwinkel van Nederland"
+// url: "https://www.blokker.nl/"
+// width: 1280
+// windowId: 1

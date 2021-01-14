@@ -80,3 +80,7 @@ summary + div {
 button {
   cursor: pointer;
 }
+.tabs-ul button {
+  display: flex;
+  align-items: center;
+}

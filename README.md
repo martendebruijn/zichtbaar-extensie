@@ -33,6 +33,11 @@ This extension is currently **in development**.
 - [ ] add shortcuts
 - [x] ~~pageInfo.main gets empty nodelist instead of null (FE: nu.nl)~~ **fixed**
 - [x] ~~Language doesn't change inside the popup~~
+- [ ] tabs
+  - [ ] add placeholder favicon
+  - [ ] add muted/unmuted icon (with alt)
+  - [ ] add sort function based on the active tab
+- [ ] change theme colors (icon, hover etc...) to the orange color I used on the product page
 
 ## Table of contents
 - [zichtbaar-extensie](#zichtbaar-extensie)
