@@ -39,12 +39,23 @@
         "default_popup": "popup.html"
     },
     "commands": {
-        "toggle-feature-foo": {
+        "toggle-feature-tabs": {
             "suggested_key": {
-                "default": "Ctrl+Shift+Y",
-                "mac": "Command+Shift+Y"
+                "default": "Ctrl+Shift+I"
             },
-            "description": "Toggle feature foo"
+            "description": "Toggle feature tabs"
+        },
+        "toggle-feature-lang": {
+            "suggested_key": {
+                "default": "Ctrl+Shift+L"
+            },
+            "description": "Toggle feature language"
+        },
+        "toggle-feature-quick-nav": {
+            "suggested_key": {
+                "default": "Ctrl+Shift+O"
+            },
+            "description": "Toggle feature quick navigation"
         },
         "_execute_browser_action": {
             "suggested_key": {
@@ -57,6 +68,7 @@
     },
     "permissions": [
         "tabs",
-        "activeTab"
+        "activeTab",
+        "notifications"
     ]
 }

@@ -252,6 +252,8 @@ function setTabInfo(tabs) {
     resultListItem.append(mutedBtn);
     resultListItem.append(closeBtn);
     const appendedBtn = document.getElementById(`tabs-btn-${index}`);
+    // if page is in English (or another language other then Dutch) set lang attr to that lang
+    appendedBtn.setAttribute('aria-label', item.title);
     const appendedMutedBtn = document.getElementById(`tabs-mutedBtn-${index}`);
     const appendedCloseBtn = document.getElementById(`tabs-closeBtn-${index}`);
 
@@ -275,6 +277,7 @@ function setTabInfo(tabs) {
     appendedBtn.append(titleSpan);
     const appendedTitle = document.getElementById(`tab-title-${index}`);
     appendedTitle.innerText = item.title;
+    appendedTitle.setAttribute('role', 'presentation');
 
     if (item.muted.muted) {
       // change this to an icon with alt
@@ -284,9 +287,11 @@ function setTabInfo(tabs) {
       appendedMutedBtn.setAttribute('data-tabid', item.id);
       const mutedIcon = document.createElement('img');
       mutedIcon.setAttribute('src', '/popup-icons/mute.svg');
-      appendedMutedBtn.setAttribute('aria-label', 'Dit tabblad is gemuted.');
+      appendedMutedBtn.setAttribute(
+        'aria-label',
+        'Dit tabblad is gedempt, druk om dempen op te heffen.'
+      );
       mutedIcon.setAttribute('alt', '');
-      // mutedIcon.setAttribute('alt', 'Dit tabblad is gemuted.');
       mutedIcon.setAttribute('role', 'presentation');
       appendedMutedBtn.append(mutedIcon);
     } else {
@@ -295,15 +300,19 @@ function setTabInfo(tabs) {
       appendedMutedBtn.setAttribute('data-tabid', item.id);
       const unmutedIcon = document.createElement('img');
       unmutedIcon.setAttribute('src', '/popup-icons/audio.svg');
-      appendedMutedBtn.setAttribute('aria-label', 'Dit tabblad is gemuted.');
+      appendedMutedBtn.setAttribute(
+        'aria-label',
+        'Dit tabblad is niet gedempt, druk om te dempen.'
+      );
       unmutedIcon.setAttribute('alt', '');
-      // unmutedIcon.setAttribute('alt', 'Dit tabblad mag audio afspelen.');
-      // unmutedIcon.setAttribute('role', 'presentation');
+      unmutedIcon.setAttribute('role', 'presentation');
       appendedMutedBtn.append(unmutedIcon);
     }
     const closeIcon = document.createElement('img');
     closeIcon.setAttribute('src', '/popup-icons/cancel.svg');
-    closeIcon.setAttribute('alt', 'Sluit dit tabblad');
+    closeIcon.setAttribute('role', 'presentation');
+    // closeIcon.setAttribute('alt', 'Sluit dit tabblad');
+    appendedCloseBtn.setAttribute('aria-label', 'Sluit dit tabblad.');
     appendedCloseBtn.append(closeIcon);
   });
   // console.log(startingId);

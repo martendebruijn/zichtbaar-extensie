@@ -85,4 +85,26 @@ chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
 // But you do have to re-install the whole thing if you didn't had commands before
 chrome.commands.onCommand.addListener(function (command) {
   console.log('Command:', command);
+  document.addEventListener('keydown', function (event) {
+    console.log(event);
+  });
+  if (command === 'toggle-feature-tabs') {
+    // CMD/CTRL + SHIFT + I
+    chrome.notifications.create(
+      'ik ben een naam',
+      {
+        title: 'Dit is een test titel',
+        message: 'Dit is een test.',
+        type: 'basic',
+        iconUrl:
+          'https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/How_to_use_icon.svg/1200px-How_to_use_icon.svg.png',
+      },
+      function () {
+        console.log('ik ben een callback'); // dit logt
+      }
+    );
+  }
 });
+
+// chrome.notifications.create(notificationId?: String,
+//    options: NotifcationOptions, callback: function)
