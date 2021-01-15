@@ -291,7 +291,7 @@ function setTabInfo(tabs) {
       appendedMutedBtn.value = true;
       appendedMutedBtn.setAttribute('data-tabid', item.id);
       const unmutedIcon = document.createElement('img');
-      unmutedIcon.setAttribute('src', '/popup-icons/flash.svg');
+      unmutedIcon.setAttribute('src', '/popup-icons/audio.svg');
       unmutedIcon.setAttribute('alt', 'Dit tabblad mag audio afspelen.');
       appendedMutedBtn.append(unmutedIcon);
     }
@@ -328,6 +328,15 @@ function sendTabTasks(msg, btn, startingId) {
     function (res) {
       const _tabId = Number(res.message);
       if (res.subject === 'muted') {
+        if (res.message.muted) {
+          btn.value = false;
+          const img = btn.querySelector('img');
+          img.setAttribute('src', './popup-icons/mute.svg');
+        } else {
+          btn.value = true;
+          const img = btn.querySelector('img');
+          img.setAttribute('src', './popup-icons/audio.svg');
+        }
         res.message.muted ? (btn.value = false) : (btn.value = true);
         // => {name: muted, muted: true, tabId: #}
         // when muted = true, the tab is muted and the value of the button has to be changed

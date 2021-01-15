@@ -32,18 +32,21 @@ This extension is currently **in development**.
     }
   ```
 - [ ] add popup banner etc
-- [ ] add 128(?)px icon
+- [ ] add 128(?)px icon (change icon color to orange)
 - [ ] add shortcuts
 - [x] ~~pageInfo.main gets empty nodelist instead of null (FE: nu.nl)~~ **fixed**
 - [x] ~~Language doesn't change inside the popup~~
-- [ ] tabs
-  - [x] add placeholder favicon (only the icon itself)
-  - [x] add muted/unmuted icon (with alt) (only the icon itself)
-  - [x] add sort function based on the active tab
-  - [ ] let user go to tab, mute/unmute and close tabs
+- [x] ~~tabs~~
+  - [x] ~~add placeholder favicon (only the icon itself)~~
+  - [x] ~~add muted/unmuted icon (with alt) (only the icon itself)~~
+  - [x] ~~add sort function based on the active tab~~
+  - [x] ~~let user go to tab, mute/unmute and close tabs~~
 - [x] change theme colors (icon, hover etc...) to the orange color I used on the product page
 - [ ] hide items when they are empty
 - [ ] test with screenreader
+- [ ] remove options page
+- [ ] set for production (minimize, delete commands etc.)
+- [ ] fix tab sequences (when it goes back to 0 it's in the wrong dir)
 
 </details>
 
