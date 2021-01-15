@@ -284,7 +284,10 @@ function setTabInfo(tabs) {
       appendedMutedBtn.setAttribute('data-tabid', item.id);
       const mutedIcon = document.createElement('img');
       mutedIcon.setAttribute('src', '/popup-icons/mute.svg');
-      mutedIcon.setAttribute('alt', 'Dit tabblad is gemuted.');
+      appendedMutedBtn.setAttribute('aria-label', 'Dit tabblad is gemuted.');
+      mutedIcon.setAttribute('alt', '');
+      // mutedIcon.setAttribute('alt', 'Dit tabblad is gemuted.');
+      mutedIcon.setAttribute('role', 'presentation');
       appendedMutedBtn.append(mutedIcon);
     } else {
       // audio icon with alt
@@ -292,7 +295,10 @@ function setTabInfo(tabs) {
       appendedMutedBtn.setAttribute('data-tabid', item.id);
       const unmutedIcon = document.createElement('img');
       unmutedIcon.setAttribute('src', '/popup-icons/audio.svg');
-      unmutedIcon.setAttribute('alt', 'Dit tabblad mag audio afspelen.');
+      appendedMutedBtn.setAttribute('aria-label', 'Dit tabblad is gemuted.');
+      unmutedIcon.setAttribute('alt', '');
+      // unmutedIcon.setAttribute('alt', 'Dit tabblad mag audio afspelen.');
+      // unmutedIcon.setAttribute('role', 'presentation');
       appendedMutedBtn.append(unmutedIcon);
     }
     const closeIcon = document.createElement('img');
