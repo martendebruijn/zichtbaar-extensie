@@ -212,6 +212,7 @@ function setTabInfo(tabs) {
     return tab.active === true;
   });
   const startingIndex = startingTab[0].index;
+  const startingId = startingTab[0].id;
   let amountSorted = 0;
   for (let index = startingIndex; index < tabs.length; index++) {
     console.log(tabs[index]);
@@ -299,10 +300,11 @@ function setTabInfo(tabs) {
     closeIcon.setAttribute('alt', 'Sluit dit tabblad');
     appendedCloseBtn.append(closeIcon);
   });
-  addEventsToTabs();
+  // console.log(startingId);
+  addEventsToTabs(startingId);
 }
 getTabs();
-function addEventsToTabs() {
+function addEventsToTabs(startingId) {
   const tabsList = document.querySelectorAll('ul.tabs-ul li');
   tabsList.forEach(function (listItem) {
     const btns = listItem.querySelectorAll('button');
@@ -314,20 +316,26 @@ function addEventsToTabs() {
           tabId: this.dataset.tabid,
         };
         console.log(msg);
-        sendTabTasks(msg, btn);
+        sendTabTasks(msg, btn, startingId);
       });
     });
   });
 }
 
-function sendTabTasks(msg, btn) {
+function sendTabTasks(msg, btn, startingId) {
   chrome.runtime.sendMessage(
     { from: 'popup', subject: 'tabTask', message: msg },
     function (res) {
-      res.message.muted ? (btn.value = false) : (btn.value = true);
-      // => {name: muted, muted: true, tabId: #}
-      // when muted = true, the tab is muted and the value of the button has to be changed
-      // to false (and vice verca)
+      const _tabId = Number(res.message);
+      if (res.subject === 'muted') {
+        res.message.muted ? (btn.value = false) : (btn.value = true);
+        // => {name: muted, muted: true, tabId: #}
+        // when muted = true, the tab is muted and the value of the button has to be changed
+        // to false (and vice verca)
+      } else if (res.subject === 'close' && _tabId != startingId) {
+        const parent = btn.parentNode;
+        parent.remove();
+      }
     }
   );
 }

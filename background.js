@@ -27,12 +27,19 @@ chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
   }
   if (msg.from === 'popup' && msg.subject === 'tabTask') {
     console.log(msg.message);
+    const _tabId = Number(msg.message.tabId);
     // {name, value, tabId}
     // open || muted || close
     if (msg.message.name === 'open') {
-      // do this
+      // make tab active
+      // chrome.tabs.update(142, { active: true });
+      chrome.tabs.update(_tabId, { active: true });
+      sendResponse({
+        from: 'background',
+        subject: 'open',
+        message: `Tab with id: ${_tabId} is now avtive.`,
+      });
     } else if (msg.message.name === 'muted') {
-      const _tabId = Number(msg.message.tabId);
       const _muted = msg.message.value === 'true';
       chrome.tabs.update(_tabId, { muted: _muted });
       const mutedConfermationMsg = {
@@ -42,12 +49,21 @@ chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
       };
       sendResponse({
         from: 'background',
-        subject: 'verification',
+        subject: 'muted',
         message: mutedConfermationMsg,
       });
+    } else {
+      // if close do this...
+      // closes tab
+      // chrome.tabs.remove(142);
+      chrome.tabs.remove(_tabId);
+
+      sendResponse({
+        from: 'background',
+        subject: 'close',
+        message: _tabId,
+      });
     }
-  } else {
-    // if close do this...
   }
 
   // sendResponse({
