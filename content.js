@@ -8,27 +8,37 @@ let pageInfo = {
 // --- NAV ---
 function getMainNav() {
   const header = document.querySelector('header');
+  console.log(header); // => null
   if (header) {
+    console.log('ik hoor niet te loggen');
     pageInfo.header = header;
-    navInHeader(header);
+    return navInHeader(header);
   } else {
-    getAllNavs(false);
+    console.log('getAllNavs()');
+    return getAllNavs(false);
   }
-
-  return header ? navInHeader(header) : getAllNavs(false);
+  // return header ? navInHeader(header) : getAllNavs(false);
 }
 function navInHeader(header) {
   const navs = header.querySelectorAll('header nav');
   return navs.length > 0 ? navs : getAllNavs(true);
 }
 function getAllNavs(scopeHeader) {
+  // scopeHeader = false
   const navs = document.querySelectorAll('nav');
   const arr = Array.from(navs);
+  console.log({ navs: navs, arr: arr });
+  // op de een of andere manier komt hij weer hier terecht
+  // => {navs: NodeList(0), arr: Array(0)}
   if (arr.length > 0) {
+    console.log('ik hoor niet te loggen');
     return getFooterNavs(arr);
   } else if (scopeHeader) {
+    console.log('ik hoor niet te loggen');
     return getUlInHeader();
   } else {
+    console.log('getAllUls()');
+    // => logt 2 keer
     return getAllUls();
   }
 }
@@ -47,6 +57,8 @@ function filterNavs(allNavs, footerNavs) {
 function getAllUls() {
   const uls = document.querySelectorAll('ul');
   const arr = Array.from(uls);
+  console.log({ uls: uls, arr: arr });
+  // => {uls: NodeList(0), arr: Array(0)}
   return arr.length > 0 ? checkUlForLinks(arr, false) : noNav();
 }
 function getUlInHeader() {
@@ -94,34 +106,42 @@ function filterUl(uls, footerUls) {
 }
 function noNav() {
   console.log("Can't find navigation...");
+  return null;
 }
 function removeHidden() {
   const mainNav = getMainNav();
-  let index = mainNav.length - 1;
-  while (index >= 0) {
-    // check if width / height === 0 => not visible
-    var style = window.getComputedStyle(mainNav[index]);
-    let display = style.getPropertyValue('display'),
-      visibility = style.getPropertyValue('visibility'),
-      opacity = style.getPropertyValue('opacity');
-    if (display === 'none' || visibility === 'hidden' || opacity === 0) {
-      mainNav.splice(index, 1);
+  console.log(mainNav); // => undefined
+  if (mainNav !== null) {
+    let index = mainNav.length - 1;
+    while (index >= 0) {
+      // check if width / height === 0 => not visible
+      var style = window.getComputedStyle(mainNav[index]);
+      let display = style.getPropertyValue('display'),
+        visibility = style.getPropertyValue('visibility'),
+        opacity = style.getPropertyValue('opacity');
+      if (display === 'none' || visibility === 'hidden' || opacity === 0) {
+        mainNav.splice(index, 1);
+      }
+      index -= 1;
     }
-    index -= 1;
+    return mainNav;
+  } else {
+    return null;
   }
-  return mainNav;
 }
 function addTabIndex() {
   const navs = removeHidden();
-  pageInfo.nav = navs;
-  console.log(navs);
-  if (navs.length >= 1) {
-    navs.forEach(function (nav) {
-      nav.setAttribute('tabindex', 0);
-    });
+  if (navs !== null) {
+    pageInfo.nav = navs;
+    console.log(navs);
+    if (navs.length >= 1) {
+      navs.forEach(function (nav) {
+        nav.setAttribute('tabindex', 0);
+      });
+    }
   }
 }
-addTabIndex();
+// addTabIndex();
 
 // --- HEADER ---
 console.log(pageInfo);
@@ -130,7 +150,7 @@ function makeHeaderFocusable() {
     pageInfo.header.setAttribute('tabindex', 0);
   }
 }
-makeHeaderFocusable();
+// makeHeaderFocusable();
 // --- MAIN ---
 function getMain() {
   const mains = document.querySelectorAll('main');
@@ -140,13 +160,13 @@ function getMain() {
     pageInfo.main = mains;
   }
 }
-getMain();
+// getMain();
 function makeMainFocusable() {
   if (pageInfo.main !== null) {
     pageInfo.main[0].setAttribute('tabindex', 0);
   }
 }
-makeMainFocusable();
+// makeMainFocusable();
 // --- FOOTER ---
 function getFooter() {
   const footers = document.querySelectorAll('footer');
@@ -154,20 +174,20 @@ function getFooter() {
   // filter out article ones
   pageInfo.footer = footers;
 }
-getFooter();
+// getFooter();
 function makeFooterFocusable() {
   if (pageInfo.footer.length > 0) {
     pageInfo.footer[0].setAttribute('tabindex', 0);
   }
 }
-makeFooterFocusable();
+// makeFooterFocusable();
 
 // --- ARTICLES ---
 function getArticles() {
   const articles = document.querySelectorAll('article');
   console.log(articles);
 }
-getArticles();
+// getArticles();
 // --- LANGUAGE ---
 function getLang() {
   const htmlTag = document.querySelector('html');
@@ -191,7 +211,7 @@ function sendHello() {
     }
   );
 }
-sendHello();
+// sendHello();
 
 // Listening to messages
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
@@ -271,3 +291,11 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
     }
   }
 });
+addTabIndex();
+makeHeaderFocusable();
+getMain();
+makeMainFocusable();
+getFooter();
+makeFooterFocusable();
+getArticles();
+sendHello();

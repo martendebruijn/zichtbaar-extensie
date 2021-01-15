@@ -89,6 +89,8 @@ button {
 }
 .tabs-ul li {
   margin: 2px 0;
+  display: flex;
+  align-items: stretch;
 }
 .tabs-ul li:first-of-type {
   margin-top: 0;
@@ -101,4 +103,7 @@ button {
 }
 .tabs-ul button > img:last-of-type {
   padding-left: 3px;
+}
+button:disabled {
+  cursor: not-allowed;
 }

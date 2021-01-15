@@ -241,10 +241,14 @@ function setTabInfo(tabs) {
     listItem.id = `tabs-list-item-${index}`;
     resultEl.append(listItem);
     const btn = document.createElement('button');
+    const mutedBtn = document.createElement('button');
     btn.id = `tabs-btn-${index}`;
+    mutedBtn.id = `tabs-mutedBtn-${index}`;
     const resultListItem = document.getElementById(`tabs-list-item-${index}`);
     resultListItem.append(btn);
+    resultListItem.append(mutedBtn);
     const appendedBtn = document.getElementById(`tabs-btn-${index}`);
+    const appendedMutedBtn = document.getElementById(`tabs-mutedBtn-${index}`);
 
     // we want: icon <> title <> muted
     // so we will append icon first, then title, and lastly muted
@@ -272,32 +276,14 @@ function setTabInfo(tabs) {
       const mutedIcon = document.createElement('img');
       mutedIcon.setAttribute('src', '/popup-icons/flash.svg');
       mutedIcon.setAttribute('alt', "'Dit tabblad is gemuted.'");
-      appendedBtn.append(mutedIcon);
+      appendedMutedBtn.append(mutedIcon);
     } else {
       // audio icon with alt
       const unmutedIcon = document.createElement('img');
       unmutedIcon.setAttribute('src', '/popup-icons/flash.svg');
       unmutedIcon.setAttribute('alt', "'Dit tabblad mag audio afspelen.'");
-      appendedBtn.append(unmutedIcon);
+      appendedMutedBtn.append(unmutedIcon);
     }
   });
 }
 getTabs();
-// active: true
-// audible: false
-// autoDiscardable: true
-// discarded: false
-// favIconUrl: "https://www.blokker.nl/on/demandware.static/Sites-blokker-nl-Site/-/default/dwc2dbeef3/images/favicon/favicon.ico"
-// height: 689
-// highlighted: true
-// id: 256
-// incognito: false
-// index: 3
-// mutedInfo: {muted: false}
-// pinned: false
-// selected: true
-// status: "complete"
-// title: "Welkom bij Blokker, de huishoudwinkel van Nederland"
-// url: "https://www.blokker.nl/"
-// width: 1280
-// windowId: 1
