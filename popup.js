@@ -240,9 +240,7 @@ function setTabInfo(tabs) {
     btn.setAttribute('name', 'open');
     btn.value = item.id;
     btn.setAttribute('data-tabid', item.id);
-
     mutedBtn.setAttribute('name', 'muted');
-
     closeBtn.setAttribute('name', 'close');
     closeBtn.value = item.id;
     closeBtn.setAttribute('data-tabid', item.id);
