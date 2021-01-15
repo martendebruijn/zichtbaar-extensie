@@ -265,7 +265,7 @@ function setTabInfo(tabs) {
       appendedBtn.append(img);
     } else {
       const placeholder = document.createElement('img');
-      placeholder.setAttribute('src', '/popup-icons/flash.svg');
+      placeholder.setAttribute('src', '/popup-icons/tabs.svg');
       placeholder.setAttribute('alt', '');
       appendedBtn.append(placeholder);
     }
@@ -283,7 +283,7 @@ function setTabInfo(tabs) {
       appendedMutedBtn.value = false;
       appendedMutedBtn.setAttribute('data-tabid', item.id);
       const mutedIcon = document.createElement('img');
-      mutedIcon.setAttribute('src', '/popup-icons/flash.svg');
+      mutedIcon.setAttribute('src', '/popup-icons/mute.svg');
       mutedIcon.setAttribute('alt', 'Dit tabblad is gemuted.');
       appendedMutedBtn.append(mutedIcon);
     } else {
@@ -296,7 +296,7 @@ function setTabInfo(tabs) {
       appendedMutedBtn.append(unmutedIcon);
     }
     const closeIcon = document.createElement('img');
-    closeIcon.setAttribute('src', '/popup-icons/global.svg');
+    closeIcon.setAttribute('src', '/popup-icons/cancel.svg');
     closeIcon.setAttribute('alt', 'Sluit dit tabblad');
     appendedCloseBtn.append(closeIcon);
   });
