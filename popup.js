@@ -188,16 +188,6 @@ function sendFocusMsg(msg) {
     }
   );
 }
-// chrome.tabs.query({ windowId: chrome.windows.WINDOW_ID_CURRENT }, (tabs) => {
-//   console.log(tabs);
-//   document.write(`<h3>The tabs you're on are:</h3>`);
-//   document.write('<ul>');
-//   for (let i = 0; i < tabs.length; i++) {
-//     document.write(`<li>${tabs[i].url}</li>`);
-//   }
-//   document.write('</ul>');
-// });
-
 function getTabs() {
   chrome.tabs.query({ windowId: chrome.windows.WINDOW_ID_Current }, (tabs) => {
     console.log(tabs);
@@ -242,13 +232,27 @@ function setTabInfo(tabs) {
     resultEl.append(listItem);
     const btn = document.createElement('button');
     const mutedBtn = document.createElement('button');
+    const closeBtn = document.createElement('button');
     btn.id = `tabs-btn-${index}`;
     mutedBtn.id = `tabs-mutedBtn-${index}`;
+    closeBtn.id = `tabs-closeBtn-${index}`;
+    btn.setAttribute('name', 'open');
+    btn.setAttribute('value', item.id);
+    btn.setAttribute('data-tabid', item.id);
+
+    mutedBtn.setAttribute('name', 'muted');
+
+    closeBtn.setAttribute('name', 'close');
+    closeBtn.setAttribute('value', item.id);
+    closeBtn.setAttribute('data-tabid', item.id);
+
     const resultListItem = document.getElementById(`tabs-list-item-${index}`);
     resultListItem.append(btn);
     resultListItem.append(mutedBtn);
+    resultListItem.append(closeBtn);
     const appendedBtn = document.getElementById(`tabs-btn-${index}`);
     const appendedMutedBtn = document.getElementById(`tabs-mutedBtn-${index}`);
+    const appendedCloseBtn = document.getElementById(`tabs-closeBtn-${index}`);
 
     // we want: icon <> title <> muted
     // so we will append icon first, then title, and lastly muted
@@ -256,12 +260,12 @@ function setTabInfo(tabs) {
     if (item.favIcon !== null) {
       const img = document.createElement('img');
       img.setAttribute('src', item.favIcon);
-      img.setAttribute('alt', "''");
+      img.setAttribute('alt', '');
       appendedBtn.append(img);
     } else {
       const placeholder = document.createElement('img');
       placeholder.setAttribute('src', '/popup-icons/flash.svg');
-      placeholder.setAttribute('alt', "''");
+      placeholder.setAttribute('alt', '');
       appendedBtn.append(placeholder);
     }
 
@@ -273,17 +277,52 @@ function setTabInfo(tabs) {
 
     if (item.muted.muted) {
       // change this to an icon with alt
+      appendedMutedBtn.setAttribute('value', true);
+      appendedMutedBtn.setAttribute('data-tabid', item.id);
       const mutedIcon = document.createElement('img');
       mutedIcon.setAttribute('src', '/popup-icons/flash.svg');
-      mutedIcon.setAttribute('alt', "'Dit tabblad is gemuted.'");
+      mutedIcon.setAttribute('alt', 'Dit tabblad is gemuted.');
       appendedMutedBtn.append(mutedIcon);
     } else {
       // audio icon with alt
+      appendedMutedBtn.setAttribute('value', false);
+      appendedMutedBtn.setAttribute('data-tabid', item.id);
       const unmutedIcon = document.createElement('img');
       unmutedIcon.setAttribute('src', '/popup-icons/flash.svg');
-      unmutedIcon.setAttribute('alt', "'Dit tabblad mag audio afspelen.'");
+      unmutedIcon.setAttribute('alt', 'Dit tabblad mag audio afspelen.');
       appendedMutedBtn.append(unmutedIcon);
     }
+    const closeIcon = document.createElement('img');
+    closeIcon.setAttribute('src', '/popup-icons/global.svg');
+    closeIcon.setAttribute('alt', 'Sluit dit tabblad');
+    appendedCloseBtn.append(closeIcon);
   });
+  addEventsToTabs();
 }
 getTabs();
+function addEventsToTabs() {
+  const tabsList = document.querySelectorAll('ul.tabs-ul li');
+  tabsList.forEach(function (listItem) {
+    const btns = listItem.querySelectorAll('button');
+    btns.forEach(function (btn) {
+      btn.addEventListener('click', function (e) {
+        const msg = {
+          name: this.name,
+          value: this.value,
+          tabId: this.dataset.tabid,
+        };
+        console.log(msg);
+        sendTabTasks(msg);
+      });
+    });
+  });
+}
+
+function sendTabTasks(msg) {
+  chrome.runtime.sendMessage(
+    { from: 'popup', subject: 'tabTask', message: msg },
+    function (res) {
+      console.log(res);
+    }
+  );
+}

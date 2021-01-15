@@ -22,8 +22,26 @@ chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
       subject: 'verification',
       message: 'Background has received that message 🔥',
     });
-  } else {
+  } else if (msg.from === 'content') {
     console.log(msg);
+  }
+  if (msg.from === 'popup' && msg.subject === 'tabTask') {
+    console.log(msg.message);
+    // {name, value, tabId}
+    // open || muted || close
+    if (msg.message.name === 'open') {
+      // do this
+    } else if (msg.message.name === 'muted') {
+      // dothis
+    } else {
+      // if close do this...
+    }
+
+    sendResponse({
+      from: 'background',
+      subject: 'verification',
+      message: 'background has received message from popup',
+    });
   }
 });
 
