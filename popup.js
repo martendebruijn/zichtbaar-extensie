@@ -86,7 +86,7 @@ const setQuickNav = (info) => {
       for (let index = 0; index < entry[1]; index++) {
         const btn = document.createElement('button');
         btn.id = `btn${entry[0]}${index + 1}`;
-        btn.setAttribute('value', entry[0]);
+        btn.value = entry[0];
         const _listItem = document.getElementById(`listitem-${entry[0]}`);
         _listItem.append(btn);
         const _btn = document.getElementById(`btn${entry[0]}${index + 1}`);
@@ -237,13 +237,13 @@ function setTabInfo(tabs) {
     mutedBtn.id = `tabs-mutedBtn-${index}`;
     closeBtn.id = `tabs-closeBtn-${index}`;
     btn.setAttribute('name', 'open');
-    btn.setAttribute('value', item.id);
+    btn.value = item.id;
     btn.setAttribute('data-tabid', item.id);
 
     mutedBtn.setAttribute('name', 'muted');
 
     closeBtn.setAttribute('name', 'close');
-    closeBtn.setAttribute('value', item.id);
+    closeBtn.value = item.id;
     closeBtn.setAttribute('data-tabid', item.id);
 
     const resultListItem = document.getElementById(`tabs-list-item-${index}`);
@@ -277,7 +277,9 @@ function setTabInfo(tabs) {
 
     if (item.muted.muted) {
       // change this to an icon with alt
-      appendedMutedBtn.setAttribute('value', true);
+      // if tab is muted (true) then we want to send false to the background Script
+      // because we want to unmute the page (and vice versa)
+      appendedMutedBtn.value = false;
       appendedMutedBtn.setAttribute('data-tabid', item.id);
       const mutedIcon = document.createElement('img');
       mutedIcon.setAttribute('src', '/popup-icons/flash.svg');
@@ -285,7 +287,7 @@ function setTabInfo(tabs) {
       appendedMutedBtn.append(mutedIcon);
     } else {
       // audio icon with alt
-      appendedMutedBtn.setAttribute('value', false);
+      appendedMutedBtn.value = true;
       appendedMutedBtn.setAttribute('data-tabid', item.id);
       const unmutedIcon = document.createElement('img');
       unmutedIcon.setAttribute('src', '/popup-icons/flash.svg');
@@ -312,17 +314,20 @@ function addEventsToTabs() {
           tabId: this.dataset.tabid,
         };
         console.log(msg);
-        sendTabTasks(msg);
+        sendTabTasks(msg, btn);
       });
     });
   });
 }
 
-function sendTabTasks(msg) {
+function sendTabTasks(msg, btn) {
   chrome.runtime.sendMessage(
     { from: 'popup', subject: 'tabTask', message: msg },
     function (res) {
-      console.log(res);
+      res.message.muted ? (btn.value = false) : (btn.value = true);
+      // => {name: muted, muted: true, tabId: #}
+      // when muted = true, the tab is muted and the value of the button has to be changed
+      // to false (and vice verca)
     }
   );
 }

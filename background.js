@@ -32,17 +32,29 @@ chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
     if (msg.message.name === 'open') {
       // do this
     } else if (msg.message.name === 'muted') {
-      // dothis
-    } else {
-      // if close do this...
+      const _tabId = Number(msg.message.tabId);
+      const _muted = msg.message.value === 'true';
+      chrome.tabs.update(_tabId, { muted: _muted });
+      const mutedConfermationMsg = {
+        tabId: _tabId,
+        muted: _muted,
+        name: msg.message.name,
+      };
+      sendResponse({
+        from: 'background',
+        subject: 'verification',
+        message: mutedConfermationMsg,
+      });
     }
-
-    sendResponse({
-      from: 'background',
-      subject: 'verification',
-      message: 'background has received message from popup',
-    });
+  } else {
+    // if close do this...
   }
+
+  // sendResponse({
+  //   from: 'background',
+  //   subject: 'verification',
+  //   message: 'background has received message from popup',
+  // });
 });
 
 // Listening to commands
