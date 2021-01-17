@@ -285,7 +285,7 @@ function setTabInfo(tabs) {
     const appendedTitle = document.getElementById(`tab-title-${index}`);
     appendedBtn.setAttribute('aria-label', 'Open dit tabblad');
     appendedTitle.innerText = item.title;
-    appendedTitle.setAttribute('role', 'presentation');
+    // appendedTitle.setAttribute('role', 'presentation');
 
     if (item.muted.muted) {
       // change this to an icon with alt

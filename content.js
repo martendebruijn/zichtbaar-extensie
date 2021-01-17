@@ -267,7 +267,12 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
     }
     const el = document.createElement('button');
     el.id = 'activateThisTab';
-    el.classList.add('sr-only');
+    el.setAttribute('position', 'absolute');
+    el.setAttribute('left', '-10000px');
+    el.setAttribute('top', 'auto');
+    el.setAttribute('width', '1px');
+    el.setAttribute('height', '1px');
+    el.setAttribute('overflow', 'hidden');
     el.setAttribute('lang', 'nl');
     document.body.insertBefore(el, document.body.firstChild);
     const _el = document.getElementById('activateThisTab');
