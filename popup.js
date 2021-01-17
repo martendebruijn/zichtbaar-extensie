@@ -37,7 +37,7 @@ const showLanguage = (_lang) => {
     full = getFullLang(_lang);
   }
   console.log(full);
-  console.log('asidjklaslk');
+  srSpeak(`De taal van de pagina is nu gewijzigd naar ${full}`);
   full
     ? setLanguage(full)
     : console.log('Error: no lang found (in showLanguage() in popup.js)');
@@ -167,8 +167,10 @@ function addQuickNavBtnsEventListeners() {
   quickNavBtns.forEach((item) =>
     item.addEventListener('click', function (e) {
       const value = e.target.value;
-      console.log(value);
+      // console.log(e.target.innerText);
+      // console.log(value);
       sendFocusMsg(value);
+      srSpeak(`${e.target.innerText} heeft nu focus`);
     })
   );
 }
@@ -274,6 +276,7 @@ function setTabInfo(tabs) {
     titleSpan.id = `tab-title-${index}`;
     appendedBtn.append(titleSpan);
     const appendedTitle = document.getElementById(`tab-title-${index}`);
+    appendedBtn.setAttribute('aria-label', 'Open dit tabblad');
     appendedTitle.innerText = item.title;
     appendedTitle.setAttribute('role', 'presentation');
 
@@ -287,7 +290,7 @@ function setTabInfo(tabs) {
       mutedIcon.setAttribute('src', '/popup-icons/mute.svg');
       appendedMutedBtn.setAttribute(
         'aria-label',
-        'Dit tabblad is gedempt, druk om dempen op te heffen.'
+        'Dit tabblad is gedempt, druk om dempen op te heffen'
       );
       mutedIcon.setAttribute('alt', '');
       mutedIcon.setAttribute('role', 'presentation');
@@ -300,7 +303,7 @@ function setTabInfo(tabs) {
       unmutedIcon.setAttribute('src', '/popup-icons/audio.svg');
       appendedMutedBtn.setAttribute(
         'aria-label',
-        'Dit tabblad is niet gedempt, druk om te dempen.'
+        'Dit tabblad is niet gedempt, druk om te dempen'
       );
       unmutedIcon.setAttribute('alt', '');
       unmutedIcon.setAttribute('role', 'presentation');
@@ -310,7 +313,10 @@ function setTabInfo(tabs) {
     closeIcon.setAttribute('src', '/popup-icons/cancel.svg');
     closeIcon.setAttribute('role', 'presentation');
     // closeIcon.setAttribute('alt', 'Sluit dit tabblad');
-    appendedCloseBtn.setAttribute('aria-label', 'Sluit dit tabblad.');
+    appendedCloseBtn.setAttribute(
+      'aria-label',
+      'Druk om dit tabblad te sluiten'
+    );
     appendedCloseBtn.append(closeIcon);
   });
   // console.log(startingId);
@@ -334,7 +340,22 @@ function addEventsToTabs(startingId) {
     });
   });
 }
+function srSpeak(text, priority) {
+  // https://a11y-guidelines.orange.com/en/web/components-examples/make-a-screen-reader-talk/
+  var el = document.createElement('div');
+  var id = 'speak-' + Date.now();
+  el.id = id;
+  el.setAttribute('aria-live', 'polite');
+  el.classList.add('sr-only');
+  document.body.appendChild(el);
+  window.setTimeout(function () {
+    document.getElementById(id).innerHTML = text;
+  }, 100);
 
+  window.setTimeout(function () {
+    document.body.removeChild(document.getElementById(id));
+  }, 1000);
+}
 function sendTabTasks(msg, btn, startingId) {
   chrome.runtime.sendMessage(
     { from: 'popup', subject: 'tabTask', message: msg },
@@ -345,10 +366,12 @@ function sendTabTasks(msg, btn, startingId) {
           btn.value = false;
           const img = btn.querySelector('img');
           img.setAttribute('src', './popup-icons/mute.svg');
+          srSpeak('Dit tabblad is nu gedempt');
         } else {
           btn.value = true;
           const img = btn.querySelector('img');
           img.setAttribute('src', './popup-icons/audio.svg');
+          srSpeak('Dit tabblad is nu niet gedempt');
         }
         res.message.muted ? (btn.value = false) : (btn.value = true);
         // => {name: muted, muted: true, tabId: #}
@@ -357,7 +380,30 @@ function sendTabTasks(msg, btn, startingId) {
       } else if (res.subject === 'close' && _tabId != startingId) {
         const parent = btn.parentNode;
         parent.remove();
+        srSpeak('Het tabblad is gesloten');
       }
     }
   );
 }
+
+// function onLanguageDetected(url, lang) {
+//   console.log(`Language in ${url} is: ${lang}`);
+// }
+
+// function onError(error) {
+//   console.log(`Error: ${error}`);
+// }
+
+// function detectLanguages(tabs) {
+//   for (tab of tabs) {
+//     var onFulfilled = onLanguageDetected.bind(null, tab.url);
+//     var detecting = browser.tabs.detectLanguage(tab.id);
+//     detecting.then(onFulfilled, onError);
+//   }
+// }
+
+// // onclicked doesn't work when you have a popup
+// browser.browserAction.onClicked.addListener(function () {
+//   var querying = browser.tabs.query({});
+//   querying.then(detectLanguages, onError);
+// });
