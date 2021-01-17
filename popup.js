@@ -18,7 +18,9 @@ function getFullLang(langCode) {
 
 function setLanguage(fullLang) {
   document.getElementById('jsDisplayLang').textContent = fullLang;
-  document.getElementById('jsSrLang').textContent = fullLang;
+  document.getElementById(
+    'jsSrLang'
+  ).textContent = `De taal van deze website staat momenteel ingesteld in het ${fullLang}.`;
 }
 
 const showLanguage = (_lang) => {
@@ -37,7 +39,7 @@ const showLanguage = (_lang) => {
     full = getFullLang(_lang);
   }
   console.log(full);
-  srSpeak(`De taal van de pagina is nu gewijzigd naar ${full}`);
+  // srSpeak(`De taal van de pagina is nu gewijzigd naar ${full}`);
   full
     ? setLanguage(full)
     : console.log('Error: no lang found (in showLanguage() in popup.js)');
@@ -141,6 +143,11 @@ function addLangBtnsEventListener() {
       const langCode = e.target.value;
       console.log(langCode);
       changeLang(langCode);
+      if (langCode === 'nl') {
+        srSpeak('De taal van deze pagina is gewijzigd naar het Nederlands');
+      } else if (langCode === 'en') {
+        srSpeak('De taal van deze pagina is gewijzigd naar het Engels');
+      }
     })
   );
 }
