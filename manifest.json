@@ -19,22 +19,19 @@
             ]
         }
     ],
+    "icons": {
+        "16": "icons/icon16.png",
+        "32": "icons/icon32.png",
+        "48": "icons/icon48.png",
+        "128": "icons/icon128.png"
+    },
     "browser_action": {
         "default_title": "Start zichtbaar",
         "default_icon": {
-            "16": "icons/favicon-16x16.png",
-            "32": "icons/favicon-32x32.png",
-            "96": "icons/favicon-96x96.png",
-            "57": "icons/apple-icon-57x57.png",
-            "60": "icons/apple-icon-60x60.png",
-            "72": "icons/apple-icon-72x72.png",
-            "76": "icons/apple-icon-76x76.png",
-            "114": "icons/apple-icon-114x114.png",
-            "120": "icons/apple-icon-120x120.png",
-            "144": "icons/apple-icon-144x144.png",
-            "152": "icons/apple-icon-152x152.png",
-            "180": "icons/apple-icon-180x180.png",
-            "192": "icons/android-icon-192x192.png"
+            "16": "icons/icon16.png",
+            "32": "icons/icon32.png",
+            "48": "icons/icon48.png",
+            "128": "icons/icon128.png"
         },
         "default_popup": "popup.html"
     },

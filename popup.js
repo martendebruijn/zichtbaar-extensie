@@ -385,7 +385,6 @@ function sendTabTasks(msg, btn, startingId) {
     }
   );
 }
-
 // function onLanguageDetected(url, lang) {
 //   console.log(`Language in ${url} is: ${lang}`);
 // }
