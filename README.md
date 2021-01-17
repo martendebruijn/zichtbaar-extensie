@@ -7,70 +7,19 @@
 ## Introduction
 This Chrome extension is part of my ([Marten de Bruijn](https://marten.work/)) graduation project of Communication Multimedia and Design @Avans university of applied science, Breda. This extension adds accessibility enhancements to websites for blind people (who can't see their screens).
 
-## Development
-This extension is currently **in development**. 
-
-### TODO
-
-<details>
-<summary>To Do List</summary>
-
-- [x] ~~language feature~~
-- [ ] quick nav feature
-  - [x] ~~find navigation~~
-  - [ ] do the same thing for ols as for uls
-  - [x] ~~Send msg from popup (which element has to have focus)~~
-  - [x] ~~focus on that element~~
-  - [x] ~~make an array/obj that contains the site structure:~~
-  
-  ```js
-    site: {
-      header: header,
-      navigation: nav,
-      main: main,
-      footer: footer  
-    }
-  ```
-- [ ] add popup banner etc
-- [ ] add 128(?)px icon (change icon color to orange)
-- [ ] add shortcuts
-- [x] ~~pageInfo.main gets empty nodelist instead of null (FE: nu.nl)~~ **fixed**
-- [x] ~~Language doesn't change inside the popup~~
-- [x] ~~tabs~~
-  - [x] ~~add placeholder favicon (only the icon itself)~~
-  - [x] ~~add muted/unmuted icon (with alt) (only the icon itself)~~
-  - [x] ~~add sort function based on the active tab~~
-  - [x] ~~let user go to tab, mute/unmute and close tabs~~
-- [x] change theme colors (icon, hover etc...) to the orange color I used on the product page
-- [ ] hide items when they are empty
-- [ ] test with screenreader
-- [ ] remove options page
-- [ ] set for production (minimize, delete commands etc.)
-- [ ] fix tab sequences (when it goes back to 0 it's in the wrong dir)
-
-</details>
+<!-- some cool screenshot -->
 
 ## Table of contents
 - [zichtbaar-extensie](#zichtbaar-extensie)
   - [Introduction](#introduction)
-  - [Development](#development)
-    - [TODO](#todo)
   - [Table of contents](#table-of-contents)
   - [Usage](#usage)
-    - [Background script](#background-script)
-      - [On installed event](#on-installed-event)
-      - [On page changed](#on-page-changed)
-    - [Popup page](#popup-page)
-    - [Options page](#options-page)
-    - [Development](#development-1)
-      - [Logging](#logging)
-  - [Welcome message](#welcome-message)
-  - [Website language](#website-language)
-    - [Finding the current language](#finding-the-current-language)
-    - [Change the current language](#change-the-current-language)
-    - [Change which languages are displayed](#change-which-languages-are-displayed)
-  - [Quick navigation](#quick-navigation)
+  - [Features](#features)
+    - [Quick navigation](#quick-navigation)
+    - [Language](#language)
+    - [Tabs](#tabs)
   - [WIKI](#wiki)
+    - [Chrome APIS](#chrome-apis)
   - [Sources](#sources)
 
 ## Usage
@@ -86,103 +35,15 @@ git clone https://github.com/martendebruijn/zichtbaar-extentie.git
 5. Load the directory.
 6. Enjoy :)
 
-### Background script
-All tasks that have to run in the background go inside the background script. You can inspect the background page by clicking on ‘Inspect views background page’ in the manage extensions page.
+## Features
+### Quick navigation
+<img width="15px" src="https://zichtbaar.net/icons/flash.svg" alt="">
 
-#### On installed event
-```js
-chrome.runtime.onInstalled.addListener(function () {
-  ...
-});
-```
+### Language
+<img width="15px" src="https://zichtbaar.net/icons/global.svg" alt="">
 
-#### On page changed
-
-I'm not entirely sure what this code does, but it is in the Google documentation.
-
-```js
-  chrome.declarativeContent.onPageChanged.removeRules(undefined, function () {
-    chrome.declarativeContent.onPageChanged.addRules([
-      {
-        conditions: [
-          new chrome.declarativeContent.PageStateMatcher({
-            pageUrl: { hostEquals: 'developer.chrome.com' },
-          }),
-        ],
-        actions: [new chrome.declarativeContent.ShowPageAction()],
-      },
-    ]);
-  });
-```
-
-### Popup page
-You can declare a popup page. This page will open when the user clicks on the extension. The popup page needs to be called popup.html. The popup will be treated as a whole different page next to the visited webpage. This means that it has its own styles and console. To inspect this page, press right click on the popup and then on ‘Inspect’.
-
-### Options page
-You also can declare an options page. This page is used to give the user options to change the extension. The options page can be found on the manage extensions page in Chrome:
-1. Go to manage extensions
-2. Go to the extension
-3. Click on details
-4. Click on Extension options
-
-### Development
-There are a couple of steps you have to do before you can go coding your extension. Firstly you have to turn on the developer mode. You can do this by going to the manage extensions page and turn the switch on in the top-right corner. \n
-
-Now you can load your extension. This can be done by clicking ‘load unpacked’ in the top-left corner. Every time there are changes made to the extension, it has to be updated to add these changes.
-
-#### Logging
-It’s very important to understand that the extension consist out multiple – and different – pages, each with its own scope (and thus console). This means you probably have to send data across the different pages. 
-
-
-## Welcome message
-The user gets a greeting on the popup page. Depending on the time it will give a different greeting. 
-
-```html
-<!-- popup.html 
-Welcome! -->
-<p><span id="welcomeMsg">Welkom</span><span id="userName"></span>!</p> 
-```
-
-```js
-// popup.js
-function welcomeMessage() {
-     getTime();
-     getUser();
-}
-function getTime() {
- const currentDate = new Date();
- const time = currentDate.toLocaleTimeString(); // => 13:01:42
- const welcomeMsg = document.getElementById('welcomeMsg');
- if (time >= '17:00:00') {
-   welcomeMsg.innerText = 'Goedemorgen '; // Goodmorning
- } else if (time >= '12:00:00') {
-   welcomeMsg.innerText = 'Goedemiddag '; // Goodafternoon
- } else if (time >= '06:00:00') {
-   welcomeMsg.innerText = 'Goedeavond '; // Goodevening
- } else if (time >= '00:00:00') {
-   welcomeMsg.innerText = 'Goedenacht '; // Goodnight
- }
-}
-function getUser() {
- const username = document.getElementById('userName');
- chrome.storage.sync.get('user', function (data) {
-   // gets username
-   if (data.user) {
-     // if username exist do:
-     username.innerText = data.user; // insert username in popup
-   } else {
-     username.remove(); // if username doesn't exist (null) => remove span#userName
-   }
- });
-}
-```
-
-## Website language
-### Finding the current language
-### Change the current language
-### Change which languages are displayed
-
-## Quick navigation
+### Tabs
+<img width="15px" src="https://zichtbaar.net/icons/tabs.svg" alt="">
 
 
 ## WIKI
@@ -192,8 +53,19 @@ function getUser() {
 | [How to build an extension](https://github.com/martendebruijn/zichtbaar-extentie/wiki/how-to-extension) | Description |
 | [Send Script from popup to content](https://github.com/martendebruijn/zichtbaar-extentie/wiki/send-script-popup-to-content) | Description |
 | [Communicating between background, content and popup](https://github.com/martendebruijn/zichtbaar-extentie/wiki/communicating) | Description |
+| [Searching for navigation](https://github.com/martendebruijn/zichtbaar-extentie/wiki/nav) | Description |
+| [Finding and changing the language](https://github.com/martendebruijn/zichtbaar-extentie/wiki/lang) | Description |
+| [A11Y enhancements](https://github.com/martendebruijn/zichtbaar-extentie/wiki/a11y) | Description |
 | [Chrome APIS overview](https://github.com/martendebruijn/zichtbaar-extentie/wiki/overview) | Description |
-| [chrome.commands](https://github.com/martendebruijn/zichtbaar-extentie/wiki/chrome-api-commands) | Description |
+
+### Chrome APIS
+| API | Description | 
+| ---- | ----- | 
+| [chrome.windows](https://github.com/martendebruijn/zichtbaar-extentie/chrome-api-windows) | Description |
+| [chrome.tabs](https://github.com/martendebruijn/zichtbaar-extentie/chrome-api-tabs) | Description |
+| [chrome.runtime](https://github.com/martendebruijn/zichtbaar-extentie/chrome-api-runtime) | Description |
+| [chrome.notifications](https://github.com/martendebruijn/zichtbaar-extentie/chrome-api-notifications) | Description |
+| [chrome.commands](https://github.com/martendebruijn/zichtbaar-extentie/chrome-api-commands) | Description |
 
 ## Sources
 
@@ -211,8 +83,18 @@ function getUser() {
 | 📖   | The Definitive Guide to DateTime Manipulation | Punit Jajodia | [Toptal](https://www.toptal.com/software/definitive-guide-to-datetime-manipulation#:~:text=Getting%20the%20Current%20Time%20Stamp,passed%20since%20January%201,%201970) | For refreshing my memory of how date and time in JavaScript works again.
 | ⚙️   | ISO Language Codes (639-1 and 693-2) and IETF Language Types | Data Hub | [Data Hub](https://datahub.io/core/language-codes) | `.csv` of all the language codes with correspondending English names
 | 🛠   | Title | Author | [https://csvjson.com/](https://csvjson.com/) | used for
-| ⚙️   | Title | Author | [#](https://codyhouse.co/blog/post/accessible-language-picker)  | used for
-| ⚙️   | Title | Author | [#](https://developer.mozilla.org/en-US/) | used for
-| 🛠   | RegEx | Author | [#](#) | used for
-
-<!-- https://stackoverflow.com/questions/31111721/pass-a-variable-from-content-script-to-popup/31112456 -->
+| ⚙️   | Title | Author | [Codyhouse](https://codyhouse.co/blog/post/accessible-language-picker)  | used for
+| ⚙️   | Title | Author | [Mozilla developer](https://developer.mozilla.org/en-US/) | used for
+| ⚙️   | RegEx | Author | [Stack overflow](https://stackoverflow.com/questions/31111721/pass-a-variable-from-content-script-to-popup/31112456) | used for
+| 📖    | RegEx | Author | [Medium](https://medium.com/@gilfink/using-messaging-in-chrome-extension-4ae65c0622f6) | used for
+| ⚙️    | RegEx | Author | [GitHub](https://github.com/AshikNesin/chrome-extension-communicate/blob/master/contentScript.js) | used for
+| 📖   | RegEx | Author | [Ashiknesin](https://ashiknesin.com/blog/sending-listening-to-messages-within-chrome-extension) | used for
+| ⚙️    | RegEx | Author | [StackOverflow](https://stackoverflow.com/questions/43055526/chrome-extension-popup-not-showing-anymore) | used for
+| 📖   | RegEx | Author | [Chrome developer](https://developer.chrome.com/docs/extensions/reference/) | used for
+| 📖   | RegEx | Author | [Chrome developer](https://developer.chrome.com/docs/extensions/reference/commands/) | used for
+| 📖    | RegEx | Author | [Chrome developer](https://developer.chrome.com/docs/extensions/reference/notifications/) | used for
+| 📖    | RegEx | Author | [Mozilla developer](https://developer.mozilla.org/en-US/docs/Web/API/Window/getComputedStyle) | used for
+| ⚙️   | RegEx | Author | [Stack overflow](https://stackoverflow.com/questions/20019958/chrome-extension-how-to-send-data-from-content-script-to-popup-html) | used for
+| ⚙️    | RegEx | Author | [Stack overflow](https://stackoverflow.com/questions/34901593/how-to-filter-an-array-from-all-elements-of-another-array) | used for
+| ⚙️   | RegEx | Author | [a11y guidelines orange](https://a11y-guidelines.orange.com/en/web/components-examples/make-a-screen-reader-talk/) | used for
+| ⚙️    | CSS Reset | Meyerweb | [Meyerweb](http://meyerweb.com/eric/tools/css/reset/ ) | used for

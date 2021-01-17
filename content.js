@@ -260,6 +260,28 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
       message: 'Content script has received that message ⚡',
     });
   }
+  if (msg.from === 'background' && msg.subject === 'switched') {
+    console.log(msg);
+    if (document.getElementById('activateThisTab')) {
+      document.getElementById('activateThisTab').remove();
+    }
+    const el = document.createElement('button');
+    el.id = 'activateThisTab';
+    el.setAttribute('position', 'absolute');
+    el.setAttribute('left', '-10000px');
+    el.setAttribute('top', 'auto');
+    el.setAttribute('width', '1px');
+    el.setAttribute('height', '1px');
+    el.setAttribute('overflow', 'hidden');
+    el.setAttribute('lang', 'nl');
+    document.body.insertBefore(el, document.body.firstChild);
+    const _el = document.getElementById('activateThisTab');
+    _el.innerText = 'Veranderd van tabblad';
+    _el.focus();
+    _el.addEventListener('click', function (e) {
+      _el.remove();
+    });
+  }
   if (msg.from === 'popup' && msg.subject === 'language') {
     console.log(msg);
     const lang = getLang();

@@ -1,8 +1,9 @@
 {
     "manifest_version": 2,
-    "name": "Test Extension",
+    "name": "Zichtbaar",
     "version": "1.0",
-    "offline_enabled": true,
+    "description": "Navigeer gemakkelijk over het web met VoiceOver.",
+    "offline_enabled": false,
     "background": {
         "persistent": false,
         "scripts": [
@@ -19,32 +20,40 @@
             ]
         }
     ],
+    "icons": {
+        "16": "icons/icon16.png",
+        "32": "icons/icon32.png",
+        "48": "icons/icon48.png",
+        "128": "icons/icon128.png"
+    },
     "browser_action": {
         "default_title": "Start zichtbaar",
         "default_icon": {
-            "16": "icons/favicon-16x16.png",
-            "32": "icons/favicon-32x32.png",
-            "96": "icons/favicon-96x96.png",
-            "57": "icons/apple-icon-57x57.png",
-            "60": "icons/apple-icon-60x60.png",
-            "72": "icons/apple-icon-72x72.png",
-            "76": "icons/apple-icon-76x76.png",
-            "114": "icons/apple-icon-114x114.png",
-            "120": "icons/apple-icon-120x120.png",
-            "144": "icons/apple-icon-144x144.png",
-            "152": "icons/apple-icon-152x152.png",
-            "180": "icons/apple-icon-180x180.png",
-            "192": "icons/android-icon-192x192.png"
+            "16": "icons/icon16.png",
+            "32": "icons/icon32.png",
+            "48": "icons/icon48.png",
+            "128": "icons/icon128.png"
         },
         "default_popup": "popup.html"
     },
     "commands": {
-        "toggle-feature-foo": {
+        "toggle-feature-tabs": {
             "suggested_key": {
-                "default": "Ctrl+Shift+Y",
-                "mac": "Command+Shift+Y"
+                "default": "Ctrl+Shift+I"
             },
-            "description": "Toggle feature foo"
+            "description": "Toggle feature tabs"
+        },
+        "toggle-feature-lang": {
+            "suggested_key": {
+                "default": "Ctrl+Shift+L"
+            },
+            "description": "Toggle feature language"
+        },
+        "toggle-feature-quick-nav": {
+            "suggested_key": {
+                "default": "Ctrl+Shift+O"
+            },
+            "description": "Toggle feature quick navigation"
         },
         "_execute_browser_action": {
             "suggested_key": {
@@ -57,6 +66,7 @@
     },
     "permissions": [
         "tabs",
-        "activeTab"
+        "activeTab",
+        "notifications"
     ]
 }

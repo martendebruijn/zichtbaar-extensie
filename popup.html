@@ -12,49 +12,53 @@
   <body>
     <noscript>U moet JavaScript inschakelen om deze extensie te gebruiken.</noscript>
     <h1>Zichtbaar</h1>
-    <nav>
+    <nav role="navigation">
       <ul>
         <li>
-          <details class="details-tabs">
+          <details class="details-tabs" aria-label="Tabbladen overzicht">
             <summary>
-              <img class="icon nav-icon-padding" src="./popup-icons/tabs.svg" alt=""><div>Tabbladen</div>
+              <img class="icon nav-icon-padding" src="./popup-icons/tabs.svg" alt=""><div aria-hidden="true">Tabbladen</div>
             </summary>
             <div>
               <div class="details-tabs-info">
                 <div class="details-tabs-btns">
-                  <ul class="tabs-ul">
+                  <ul class="tabs-ul" aria-label="Een lijst van geopende tabbladen">
                   </ul>
                 </div>
             </div>
           </details>
         </li>
         <li>
-          <details class="details-lang">
+          <details class="details-lang" aria-label="Taal wijzigen">
             <summary>
-              <img class="icon nav-icon-padding" src="./popup-icons/global.svg" alt=""><div>Taal wijzigen</div>
+              <img class="icon nav-icon-padding" src="./popup-icons/global.svg" alt=""><div aria-hidden="true">Taal wijzigen</div>
             </summary>
             <div>
               <div class="details-lang-info">
-                <div><h6>Taal</h6></div>
-                <div><p id="jsDisplayLang">N/A</p></div>
+                <div><h6 aria-hidden="true">Taal</h6></div>
+                <div><p id="jsDisplayLang" aria-hidden="true">N/A</p></div>
                 <div class="sr-only">
-                  <span>De taal van deze website staat momenteel ingesteld in het </span>
-                  <span id="jsSrLang">N/A</span>
-                  <span>.</span>
+                  <span id="jsSrLang">De taal van deze website staat momenteel ingesteld in het N/A.</span>
                 </div>
               </div>
               <div class="details-lang-btns">
-                <button id="btnNl" value="nl">Nederlands</button>
-                <button id="btnEn" value="en">Engels</button>
-                <button id="btnOther" value="other" disabled>Anders</button>
+                <button id="btnNl" value="nl">
+                  <span class="sr-only">Verander de taal naar het</span>
+                  Nederlands</button>
+                <button id="btnEn" value="en">
+                  <span class="sr-only">Verander de taal naar het</span>
+                  Engels</button>
+                <button id="btnOther" value="other" disabled>
+                  <span class="sr-only">Verander de taal naar een andere taal.</span>
+                  <span aria-hidden="true">Anders</span></button>
               </div>
             </div>
           </details>
         </li>
         <li>
-          <details class="details-quickNav">
+          <details class="details-quickNav" aria-label="Snelle navigatie">
             <summary>
-              <img class="icon nav-icon-padding" src="./popup-icons/flash.svg" alt=""><div>Snelle navigatie</div>
+              <img class="icon nav-icon-padding" src="./popup-icons/flash.svg" alt=""><div aria-hidden="true">Snelle navigatie</div>
             </summary>
             <div>
               <nav>
