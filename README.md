@@ -7,7 +7,7 @@
 ## Introduction
 This Chrome extension is part of my ([Marten de Bruijn](https://marten.work/)) graduation project of Communication Multimedia and Design @Avans university of applied science, Breda. This extension adds accessibility enhancements to websites for blind people (who can't see their screens).
 
-<!-- some cool screenshot -->
+<img src="./README_ASSETS/thumb.png" alt="">
 
 ## Table of contents
 - [zichtbaar-extensie](#zichtbaar-extensie)
