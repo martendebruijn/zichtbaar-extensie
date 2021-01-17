@@ -34,6 +34,13 @@ chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
       // make tab active
       // chrome.tabs.update(142, { active: true });
       chrome.tabs.update(_tabId, { active: true });
+      chrome.tabs.query({ active: true }, function (tabs) {
+        chrome.tabs.sendMessage(tabs[0].id, {
+          from: 'background',
+          subject: 'switched',
+          message: 'press tab',
+        });
+      });
       sendResponse({
         from: 'background',
         subject: 'open',
@@ -85,25 +92,25 @@ chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
 // But you do have to re-install the whole thing if you didn't had commands before
 chrome.commands.onCommand.addListener(function (command) {
   console.log('Command:', command);
-  document.addEventListener('keydown', function (event) {
-    console.log(event);
-  });
-  if (command === 'toggle-feature-tabs') {
-    // CMD/CTRL + SHIFT + I
-    chrome.notifications.create(
-      'ik ben een naam',
-      {
-        title: 'Dit is een test titel',
-        message: 'Dit is een test.',
-        type: 'basic',
-        iconUrl:
-          'https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/How_to_use_icon.svg/1200px-How_to_use_icon.svg.png',
-      },
-      function () {
-        console.log('ik ben een callback'); // dit logt
-      }
-    );
-  }
+  // document.addEventListener('keydown', function (event) {
+  //   console.log(event);
+  // });
+  // if (command === 'toggle-feature-tabs') {
+  //   // CMD/CTRL + SHIFT + I
+  //   chrome.notifications.create(
+  //     'ik ben een naam',
+  //     {
+  //       title: 'Dit is een test titel',
+  //       message: 'Dit is een test.',
+  //       type: 'basic',
+  //       iconUrl:
+  //         'https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/How_to_use_icon.svg/1200px-How_to_use_icon.svg.png',
+  //     },
+  //     function () {
+  //       console.log('ik ben een callback'); // dit logt
+  //     }
+  //   );
+  // }
 });
 
 // chrome.notifications.create(notificationId?: String,
