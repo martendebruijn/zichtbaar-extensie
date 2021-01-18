@@ -1,7 +1,12 @@
 # zichtbaar-extensie
 
-<div style="display:flex;">
+<div style="display:flex; justify-content=center; align-items:center">
   <img src="https://img.shields.io/github/license/martendebruijn/zichtbaar-extentie" />
+  <img src="https://img.shields.io/github/languages/count/martendebruijn/zichtbaar-extensie" />
+  <img src="https://img.shields.io/github/languages/top/martendebruijn/zichtbaar-extensie" />
+  <img src="https://img.shields.io/github/languages/code-size/martendebruijn/zichtbaar-extensie" />
+  <img src="https://img.shields.io/github/repo-size/martendebruijn/zichtbaar-extensie" />
+  <img src="https://img.shields.io/github/last-commit/martendebruijn/zichtbaar-extensie" />
 </div>
 
 ## Introduction
