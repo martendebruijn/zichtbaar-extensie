@@ -7,6 +7,9 @@
   <img src="https://img.shields.io/github/languages/code-size/martendebruijn/zichtbaar-extensie" />
   <img src="https://img.shields.io/github/repo-size/martendebruijn/zichtbaar-extensie" />
   <img src="https://img.shields.io/github/last-commit/martendebruijn/zichtbaar-extensie" />
+  <img src="https://img.shields.io/badge/-chrome%20extension-blue" />
+  <img src="https://img.shields.io/badge/-a11y-blue" />
+  <img src="https://img.shields.io/badge/chrome%20extension%20manifest-v2-blue" />
 </div>
 
 ## Introduction
