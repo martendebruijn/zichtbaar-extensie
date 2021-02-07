@@ -260,6 +260,10 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
       message: 'Content script has received that message ⚡',
     });
   }
+  if (msg.from === 'background' && msg.subject === 'noLang') {
+    console.log(msg);
+    detectLangOfText();
+  }
   if (msg.from === 'background' && msg.subject === 'switched') {
     console.log(msg);
     if (document.getElementById('activateThisTab')) {
@@ -321,3 +325,28 @@ getFooter();
 makeFooterFocusable();
 getArticles();
 sendHello();
+
+function getText() {
+  const text = document.querySelector('p');
+  return text.innerText;
+}
+function onLanguageDetected(langInfo) {
+  for (lang of langInfo.languages) {
+    console.log('Language is: ' + lang.language);
+    console.log('Percentage is: ' + lang.percentage);
+    sendLang({ lang: lang.language, percentage: lang.percentage });
+  }
+}
+function detectLangOfText() {
+  var text = getText();
+  console.log(text);
+  chrome.i18n.detectLanguage(text, onLanguageDetected);
+}
+
+function sendLang(objLang) {
+  chrome.runtime.sendMessage({
+    from: 'content',
+    subject: 'langg',
+    message: { detected: objLang, langSetting: getLang() },
+  });
+}

@@ -22,8 +22,50 @@ chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
       subject: 'verification',
       message: 'Background has received that message 🔥',
     });
-  } else if (msg.from === 'content') {
+  }
+  if (msg.from === 'content' && msg.subject === 'langg') {
     console.log(msg);
+    if (msg.message.detected.percentage >= 50) {
+      if (msg.message.detected.lang != msg.message.langSetting) {
+        // var buttons = [
+        //   {
+        //     title: 'Chocolate',
+        //   },
+        //   {
+        //     title: 'Battenberg',
+        //   },
+        // ];
+        var dLang;
+        var sLang;
+        if (msg.message.detected.lang == 'en') {
+          dLang = 'Engels';
+        } else if (msg.message.detected.lang == 'nl') {
+          dLang = 'Nederlands';
+        }
+        if (msg.message.langSetting == 'en') {
+          sLang = 'Engels';
+        } else if (msg.message.langSetting == 'nl') {
+          sLang = 'Nederlands';
+        }
+        chrome.notifications.create(
+          'incorrect-language',
+          {
+            title: 'Waarschijnlijk foutieve taal instelling',
+            message: `De taal van deze website staat ingesteld in het ${sLang}, ik heb ${dLang} gedetecteerd.`,
+            type: 'basic',
+            // buttons: buttons,
+            iconUrl: 'icons/icon128.png',
+          },
+          function () {
+            console.log('ik ben een callback'); // dit logt
+          }
+        );
+        chrome.notifications.onButtonClicked.addListener((id, index) => {
+          chrome.notifications.clear(id);
+          console.log('You chose: ' + buttons[index].title);
+        });
+      }
+    }
   }
   if (msg.from === 'popup' && msg.subject === 'tabTask') {
     console.log(msg.message);
@@ -115,3 +157,43 @@ chrome.commands.onCommand.addListener(function (command) {
 
 // chrome.notifications.create(notificationId?: String,
 //    options: NotifcationOptions, callback: function)
+
+function _getLangAlltabs() {
+  chrome.tabs.query({ windowId: chrome.windows.WINDOW_ID_Current }, (tabs) => {
+    tabs.forEach((_tab) => {
+      // console.log(_tab);
+      // console.log(_tab.id);
+      chrome.tabs.detectLanguage(_tab.id, function (_language) {
+        console.log({
+          id: _tab.id,
+          lang: _language,
+          url: _tab.url,
+        });
+      });
+    });
+  });
+  // chrome.tabs.detectLanguage(tabId, callback);
+}
+function _getLang(tabId) {
+  return chrome.tabs.detectLanguage(tabId, function (l) {
+    console.log(l);
+    return l;
+  });
+}
+
+chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
+  if (changeInfo.status == 'complete') {
+    const detLang = _getLang(tabId);
+    if (detLang == undefined) {
+      console.log('detLang === und');
+      chrome.tabs.query({ active: true }, function (tabs) {
+        const msg = 'Cant detect language...';
+        chrome.tabs.sendMessage(tabs[0].id, {
+          from: 'background',
+          subject: 'noLang',
+          message: msg,
+        });
+      });
+    }
+  }
+});
