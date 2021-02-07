@@ -261,8 +261,8 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
     });
   }
   if (msg.from === 'background' && msg.subject === 'noLang') {
-    console.log(msg);
-    detectLangOfText();
+    // receiving if the background script can't detect the language of the page
+    detectLangOfText(); // detect the language of a p element from the page
   }
   if (msg.from === 'background' && msg.subject === 'switched') {
     console.log(msg);
@@ -327,23 +327,24 @@ getArticles();
 sendHello();
 
 function getText() {
-  const text = document.querySelector('p');
-  return text.innerText;
+  const text = document.querySelector('p'); // gets the first p element it sees
+  return text.innerText; // return the text inside the p element
 }
 function onLanguageDetected(langInfo) {
+  // callback of detectLangOfText()
   for (lang of langInfo.languages) {
-    console.log('Language is: ' + lang.language);
-    console.log('Percentage is: ' + lang.percentage);
-    sendLang({ lang: lang.language, percentage: lang.percentage });
+    // ? copied from MDN
+    sendLang({ lang: lang.language, percentage: lang.percentage }); // send the detected language and how sure it is back to the background script
   }
 }
 function detectLangOfText() {
-  var text = getText();
-  console.log(text);
-  chrome.i18n.detectLanguage(text, onLanguageDetected);
+  // detect the language of text
+  var text = getText(); // provide text
+  chrome.i18n.detectLanguage(text, onLanguageDetected); // detect the language and fire callback
 }
 
 function sendLang(objLang) {
+  // sends the detected language to the background script and also the value of the lang attribute of the html element
   chrome.runtime.sendMessage({
     from: 'content',
     subject: 'langg',

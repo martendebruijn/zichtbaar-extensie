@@ -24,46 +24,66 @@ chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
     });
   }
   if (msg.from === 'content' && msg.subject === 'langg') {
-    console.log(msg);
+    // verify the message
     if (msg.message.detected.percentage >= 50) {
-      if (msg.message.detected.lang != msg.message.langSetting) {
-        // var buttons = [
-        //   {
-        //     title: 'Chocolate',
-        //   },
-        //   {
-        //     title: 'Battenberg',
-        //   },
-        // ];
-        var dLang;
-        var sLang;
-        if (msg.message.detected.lang == 'en') {
-          dLang = 'Engels';
-        } else if (msg.message.detected.lang == 'nl') {
-          dLang = 'Nederlands';
-        }
-        if (msg.message.langSetting == 'en') {
-          sLang = 'Engels';
-        } else if (msg.message.langSetting == 'nl') {
-          sLang = 'Nederlands';
-        }
-        chrome.notifications.create(
-          'incorrect-language',
+      // only accept it if it is equal or more than 50%
+      var dLang; // detected language
+      var sLang; // language of <html lang="">
+      if (
+        msg.message.detected.lang == 'en' ||
+        msg.message.detected.lang == 'en-US' ||
+        msg.message.detected.lang == 'en-GB'
+      ) {
+        // make sure en, en-US and en-GB are all detected as English
+        dLang = 'Engels'; // make dLang English
+      } else if (msg.message.detected.lang == 'nl') {
+        // make dLang dutch if the detected lang code is "nl"
+        dLang = 'Nederlands';
+      }
+      if (
+        msg.message.langSetting == 'en' ||
+        msg.message.langSetting == 'en-US' ||
+        msg.message.langSetting == 'en-GB'
+      ) {
+        // same as above but for the set language attribute of the html element
+        sLang = 'Engels';
+      } else if (msg.message.langSetting == 'nl') {
+        sLang = 'Nederlands';
+      }
+      if (dLang != sLang) {
+        // when the detected language doesn't equal the set language do this...
+        var buttons = [
+          // define the buttons of the notification
           {
-            title: 'Waarschijnlijk foutieve taal instelling',
-            message: `De taal van deze website staat ingesteld in het ${sLang}, ik heb ${dLang} gedetecteerd.`,
-            type: 'basic',
-            // buttons: buttons,
-            iconUrl: 'icons/icon128.png',
+            title: 'Ja, wijzig de taal.', // Yes button
           },
-          function () {
-            console.log('ik ben een callback'); // dit logt
-          }
-        );
-        chrome.notifications.onButtonClicked.addListener((id, index) => {
-          chrome.notifications.clear(id);
-          console.log('You chose: ' + buttons[index].title);
-        });
+          {
+            title: 'Nee, wijzig de taal niet.', // No button
+          },
+        ];
+        if (dLang !== undefined && sLang !== undefined) {
+          // don't fire the notification if one of the language values is undefined
+          chrome.notifications.create(
+            // create a notification
+            'incorrect-language', // name of the notification
+            {
+              title: 'Waarschijnlijk foutieve taal instelling', // title (in bold)
+              message: `De taal van deze website staat ingesteld in het ${sLang}, ik heb ${dLang} gedetecteerd. Zal ik het aanpassen?`,
+              type: 'basic',
+              buttons: buttons,
+              iconUrl: 'icons/icon128.png',
+            },
+            function () {
+              console.log('ik ben een callback'); // callback
+            }
+          );
+          chrome.notifications.onButtonClicked.addListener((id, index) => {
+            // add eventlistener for the buttons of the notification
+            chrome.notifications.clear(id); // ? clear notifications
+            console.log('You chose: ' + buttons[index].title); // log which button was chosen
+            // change language
+          });
+        }
       }
     }
   }
@@ -114,56 +134,16 @@ chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
       });
     }
   }
-
-  // sendResponse({
-  //   from: 'background',
-  //   subject: 'verification',
-  //   message: 'background has received message from popup',
-  // });
 });
-
-// Listening to commands
-// As the manifest key name implies, suggested_key is only a suggestion for key binding.
-// That suggestion will be taken into consideration only if the key is not already assigned
-// to another command.
-// Another thing to have in mind is that suggested keys are only considered when an extension is
-// first installed. Disabling and enabling, updating, or reloading won't have any effect. So if
-// you just changed the suggested key in your manifest and want to test it, you have to uninstall
-// the extension and install it again.
-// Works for me tho ^ just updating works
-// But you do have to re-install the whole thing if you didn't had commands before
-chrome.commands.onCommand.addListener(function (command) {
-  console.log('Command:', command);
-  // document.addEventListener('keydown', function (event) {
-  //   console.log(event);
-  // });
-  // if (command === 'toggle-feature-tabs') {
-  //   // CMD/CTRL + SHIFT + I
-  //   chrome.notifications.create(
-  //     'ik ben een naam',
-  //     {
-  //       title: 'Dit is een test titel',
-  //       message: 'Dit is een test.',
-  //       type: 'basic',
-  //       iconUrl:
-  //         'https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/How_to_use_icon.svg/1200px-How_to_use_icon.svg.png',
-  //     },
-  //     function () {
-  //       console.log('ik ben een callback'); // dit logt
-  //     }
-  //   );
-  // }
-});
-
-// chrome.notifications.create(notificationId?: String,
-//    options: NotifcationOptions, callback: function)
 
 function _getLangAlltabs() {
+  // detects language of all open tabs
   chrome.tabs.query({ windowId: chrome.windows.WINDOW_ID_Current }, (tabs) => {
+    // gets all tabs in window
     tabs.forEach((_tab) => {
-      // console.log(_tab);
-      // console.log(_tab.id);
+      // loop over tabs
       chrome.tabs.detectLanguage(_tab.id, function (_language) {
+        // detect the language of each tab
         console.log({
           id: _tab.id,
           lang: _language,
@@ -172,9 +152,9 @@ function _getLangAlltabs() {
       });
     });
   });
-  // chrome.tabs.detectLanguage(tabId, callback);
 }
 function _getLang(tabId) {
+  // detect the language of one tab
   return chrome.tabs.detectLanguage(tabId, function (l) {
     console.log(l);
     return l;
@@ -182,17 +162,18 @@ function _getLang(tabId) {
 }
 
 chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
+  // listen if a tab is updated
   if (changeInfo.status == 'complete') {
-    const detLang = _getLang(tabId);
+    // wait till the tab is finished updating
+    const detLang = _getLang(tabId); // detect the language of the tab
     if (detLang == undefined) {
-      console.log('detLang === und');
-      chrome.tabs.query({ active: true }, function (tabs) {
-        const msg = 'Cant detect language...';
-        chrome.tabs.sendMessage(tabs[0].id, {
-          from: 'background',
-          subject: 'noLang',
-          message: msg,
-        });
+      // if it can't detect the language
+      const msg = 'Cant detect language...';
+      chrome.tabs.sendMessage(tabId, {
+        // send message to content.js to see if it can find out the language
+        from: 'background',
+        subject: 'noLang',
+        message: msg,
       });
     }
   }
