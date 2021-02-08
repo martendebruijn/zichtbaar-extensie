@@ -17,28 +17,20 @@ function getMainNav() {
     console.log('getAllNavs()');
     return getAllNavs(false);
   }
-  // return header ? navInHeader(header) : getAllNavs(false);
 }
 function navInHeader(header) {
   const navs = header.querySelectorAll('header nav');
   return navs.length > 0 ? navs : getAllNavs(true);
 }
 function getAllNavs(scopeHeader) {
-  // scopeHeader = false
   const navs = document.querySelectorAll('nav');
   const arr = Array.from(navs);
   console.log({ navs: navs, arr: arr });
-  // op de een of andere manier komt hij weer hier terecht
-  // => {navs: NodeList(0), arr: Array(0)}
   if (arr.length > 0) {
-    console.log('ik hoor niet te loggen');
     return getFooterNavs(arr);
   } else if (scopeHeader) {
-    console.log('ik hoor niet te loggen');
     return getUlInHeader();
   } else {
-    console.log('getAllUls()');
-    // => logt 2 keer
     return getAllUls();
   }
 }
@@ -215,115 +207,118 @@ function sendHello() {
 
 // Listening to messages
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
-  // Msg validation
-  if (msg.from === 'popup' && msg.subject === 'DOMInfo') {
-    // var domInfo = 'test';
-    console.log(msg);
-    // Directly respond to the sender (popup script)
-    sendResponse({
-      from: 'content',
-      subject: 'verification',
-      message: 'Content script has received that message ⚡',
-    });
-  }
-  if (msg.from === 'popup' && msg.subject === 'pageInfo') {
-    console.log(msg);
-    // cannot read property length of null (this works, but is ugly => refactor)
-    if (pageInfo.nav === null) {
-      pageInfo.nav = [];
+  if (msg.from === 'popup') {
+    // Msg validation
+    if (msg.subject === 'DOMInfo') {
+      // var domInfo = 'test';
+      console.log(msg);
+      // Directly respond to the sender (popup script)
+      sendResponse({
+        from: 'content',
+        subject: 'verification',
+        message: 'Content script has received that message ⚡',
+      });
     }
-    if (pageInfo.header === null) {
-      console.log([].length);
-      pageInfo.header = [];
+    if (msg.subject === 'pageInfo') {
+      console.log(msg);
+      // cannot read property length of null (this works, but is ugly => refactor)
+      if (pageInfo.nav === null) {
+        pageInfo.nav = [];
+      }
+      if (pageInfo.header === null) {
+        console.log([].length);
+        pageInfo.header = [];
+      }
+      if (pageInfo.main === null) {
+        pageInfo.main = [];
+      }
+      if (pageInfo.footer === null) {
+        pageInfo.footer = [];
+      }
+      const _pageInfo = {
+        nav: pageInfo.nav.length,
+        header: pageInfo.header.length,
+        main: pageInfo.main.length,
+        footer: pageInfo.footer.length,
+      };
+      sendResponse(_pageInfo);
+      console.log({ pageInfo: pageInfo, _pageInfo: _pageInfo });
     }
-    if (pageInfo.main === null) {
-      pageInfo.main = [];
+    if (msg.subject === 'language') {
+      console.log(msg);
+      const lang = getLang();
+      console.log(`lang = ${lang}`);
+      sendResponse({
+        from: 'content',
+        subject: 'lang',
+        msg: lang,
+      });
     }
-    if (pageInfo.footer === null) {
-      pageInfo.footer = [];
+    if (msg.subject === 'changeLanguageTo') {
+      console.log(msg);
+      // change lang attr
+      setLang(msg.message);
     }
-    const _pageInfo = {
-      nav: pageInfo.nav.length,
-      header: pageInfo.header.length,
-      main: pageInfo.main.length,
-      footer: pageInfo.footer.length,
-    };
-    sendResponse(_pageInfo);
-    console.log({ pageInfo: pageInfo, _pageInfo: _pageInfo });
-  }
-  if (msg.from === 'background' && msg.subject === 'inital') {
-    console.log(msg);
-    // Directly respond to the sender (background script)
-    sendResponse({
-      from: 'content',
-      subject: 'verification',
-      message: 'Content script has received that message ⚡',
-    });
-  }
-  if (msg.from === 'background' && msg.subject === 'noLang') {
-    // receiving if the background script can't detect the language of the page
-    detectLangOfText(); // detect the language of a p element from the page
-  }
-  if (msg.from === 'background' && msg.subject === 'changeLangg') {
-    // receiving if the user clicks on the button to change the language of the lang attribute in the notification
-    if (msg.message == 'Nederlands') {
-      // if the message says Dutch change the language to Dutch
-      setLang('nl');
-    } else if (msg.message == 'Engels') {
-      // if the message says English change the language to English
-      setLang('en');
+    if (msg.subject === 'Focus') {
+      console.log(msg);
+      if (msg.message === 'nav') {
+        pageInfo.nav[0].focus();
+      }
+      if (msg.message === 'header') {
+        pageInfo.header.focus();
+      }
+      if (msg.message === 'main') {
+        pageInfo.main[0].focus();
+      }
+      if (msg.message === 'footer') {
+        pageInfo.footer[0].focus();
+      }
     }
-  }
-  if (msg.from === 'background' && msg.subject === 'switched') {
-    console.log(msg);
-    if (document.getElementById('activateThisTab')) {
-      document.getElementById('activateThisTab').remove();
+  } else if (msg.from === 'background') {
+    if (msg.subject === 'inital') {
+      console.log(msg);
+      // Directly respond to the sender (background script)
+      sendResponse({
+        from: 'content',
+        subject: 'verification',
+        message: 'Content script has received that message ⚡',
+      });
     }
-    const el = document.createElement('button');
-    el.id = 'activateThisTab';
-    el.setAttribute('position', 'absolute');
-    el.setAttribute('left', '-10000px');
-    el.setAttribute('top', 'auto');
-    el.setAttribute('width', '1px');
-    el.setAttribute('height', '1px');
-    el.setAttribute('overflow', 'hidden');
-    el.setAttribute('lang', 'nl');
-    document.body.insertBefore(el, document.body.firstChild);
-    const _el = document.getElementById('activateThisTab');
-    _el.innerText = 'Veranderd van tabblad';
-    _el.focus();
-    _el.addEventListener('click', function (e) {
-      _el.remove();
-    });
-  }
-  if (msg.from === 'popup' && msg.subject === 'language') {
-    console.log(msg);
-    const lang = getLang();
-    console.log(`lang = ${lang}`);
-    sendResponse({
-      from: 'content',
-      subject: 'lang',
-      msg: lang,
-    });
-  }
-  if (msg.from === 'popup' && msg.subject === 'changeLanguageTo') {
-    console.log(msg);
-    // change lang attr
-    setLang(msg.message);
-  }
-  if (msg.from === 'popup' && msg.subject === 'Focus') {
-    console.log(msg);
-    if (msg.message === 'nav') {
-      pageInfo.nav[0].focus();
+    if (msg.subject === 'noLang') {
+      // receiving if the background script can't detect the language of the page
+      detectLangOfText(); // detect the language of a p element from the page
     }
-    if (msg.message === 'header') {
-      pageInfo.header.focus();
+    if (msg.subject === 'changeLangg') {
+      // receiving if the user clicks on the button to change the language of the lang attribute in the notification
+      if (msg.message == 'Nederlands') {
+        // if the message says Dutch change the language to Dutch
+        setLang('nl');
+      } else if (msg.message == 'Engels') {
+        // if the message says English change the language to English
+        setLang('en');
+      }
     }
-    if (msg.message === 'main') {
-      pageInfo.main[0].focus();
-    }
-    if (msg.message === 'footer') {
-      pageInfo.footer[0].focus();
+    if (msg.subject === 'switched') {
+      console.log(msg);
+      if (document.getElementById('activateThisTab')) {
+        document.getElementById('activateThisTab').remove();
+      }
+      const el = document.createElement('button');
+      el.id = 'activateThisTab';
+      el.setAttribute('position', 'absolute');
+      el.setAttribute('left', '-10000px');
+      el.setAttribute('top', 'auto');
+      el.setAttribute('width', '1px');
+      el.setAttribute('height', '1px');
+      el.setAttribute('overflow', 'hidden');
+      el.setAttribute('lang', 'nl');
+      document.body.insertBefore(el, document.body.firstChild);
+      const _el = document.getElementById('activateThisTab');
+      _el.innerText = 'Veranderd van tabblad';
+      _el.focus();
+      _el.addEventListener('click', function (e) {
+        _el.remove();
+      });
     }
   }
 });
