@@ -80,8 +80,18 @@ chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
           chrome.notifications.onButtonClicked.addListener((id, index) => {
             // add eventlistener for the buttons of the notification
             chrome.notifications.clear(id); // ? clear notifications
-            console.log('You chose: ' + buttons[index].title); // log which button was chosen
-            // change language
+            if (index == 0) {
+              // buttons[0] = yes, change the language
+              chrome.tabs.query({ active: true }, function (tabs) {
+                // get the active tab
+                chrome.tabs.sendMessage(tabs[0].id, {
+                  // send message to content.js of this tab with the detected language (which is the language it has to change to)
+                  from: 'background',
+                  subject: 'changeLangg',
+                  message: dLang,
+                });
+              });
+            }
           });
         }
       }
@@ -163,18 +173,20 @@ function _getLang(tabId) {
 
 chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
   // listen if a tab is updated
-  if (changeInfo.status == 'complete') {
-    // wait till the tab is finished updating
-    const detLang = _getLang(tabId); // detect the language of the tab
-    if (detLang == undefined) {
-      // if it can't detect the language
-      const msg = 'Cant detect language...';
-      chrome.tabs.sendMessage(tabId, {
-        // send message to content.js to see if it can find out the language
-        from: 'background',
-        subject: 'noLang',
-        message: msg,
-      });
+  if (!tab.url.includes('google')) {
+    if (changeInfo.status == 'complete') {
+      // wait till the tab is finished updating
+      const detLang = _getLang(tabId); // detect the language of the tab
+      if (detLang == undefined) {
+        // if it can't detect the language
+        const msg = 'Cant detect language...';
+        chrome.tabs.sendMessage(tabId, {
+          // send message to content.js to see if it can find out the language
+          from: 'background',
+          subject: 'noLang',
+          message: msg,
+        });
+      }
     }
   }
 });

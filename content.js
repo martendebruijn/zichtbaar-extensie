@@ -264,6 +264,16 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
     // receiving if the background script can't detect the language of the page
     detectLangOfText(); // detect the language of a p element from the page
   }
+  if (msg.from === 'background' && msg.subject === 'changeLangg') {
+    // receiving if the user clicks on the button to change the language of the lang attribute in the notification
+    if (msg.message == 'Nederlands') {
+      // if the message says Dutch change the language to Dutch
+      setLang('nl');
+    } else if (msg.message == 'Engels') {
+      // if the message says English change the language to English
+      setLang('en');
+    }
+  }
   if (msg.from === 'background' && msg.subject === 'switched') {
     console.log(msg);
     if (document.getElementById('activateThisTab')) {
