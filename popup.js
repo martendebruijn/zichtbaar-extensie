@@ -392,24 +392,20 @@ function sendTabTasks(msg, btn, startingId) {
     }
   );
 }
-// function onLanguageDetected(url, lang) {
-//   console.log(`Language in ${url} is: ${lang}`);
-// }
+const detectAudioEl = document.getElementById('detectAudioEl'); // get UI button
+detectAudioEl.addEventListener('click', detectAudio); // fire detectAudio() when clicked
 
-// function onError(error) {
-//   console.log(`Error: ${error}`);
-// }
-
-// function detectLanguages(tabs) {
-//   for (tab of tabs) {
-//     var onFulfilled = onLanguageDetected.bind(null, tab.url);
-//     var detecting = browser.tabs.detectLanguage(tab.id);
-//     detecting.then(onFulfilled, onError);
-//   }
-// }
-
-// // onclicked doesn't work when you have a popup
-// browser.browserAction.onClicked.addListener(function () {
-//   var querying = browser.tabs.query({});
-//   querying.then(detectLanguages, onError);
-// });
+function detectAudio() {
+  chrome.tabs.query({ windowId: chrome.windows.WINDOW_ID_Current }, (tabs) => {
+    // get all tabs of the active window
+    tabs.forEach(function (tab) {
+      // loop over all tabs
+      console.log({
+        title: tab.title,
+        audio: tab.audible,
+        // icon: favIconUrl, // not every tab has a favIconUrl (FE: chrome://extensions)
+        id: tab.id,
+      });
+    });
+  });
+}
