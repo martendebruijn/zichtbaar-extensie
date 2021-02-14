@@ -12,6 +12,8 @@
   <img src="https://img.shields.io/badge/chrome%20extension%20manifest-v2-blue" />
 </div>
 
+<!-- comment for testing purpose -->
+
 ## Introduction
 This Chrome extension is part of my ([Marten de Bruijn](https://marten.work/)) graduation project of Communication Multimedia and Design @Avans university of applied science, Breda. This extension adds accessibility enhancements to websites for blind people (who can't see their screens).
 
