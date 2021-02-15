@@ -37,33 +37,15 @@
         "default_popup": "popup.html"
     },
     "commands": {
-        "toggle-feature-tabs": {
-            "suggested_key": {
-                "default": "Ctrl+Shift+I"
-            },
-            "description": "Toggle feature tabs"
-        },
-        "toggle-feature-lang": {
-            "suggested_key": {
-                "default": "Ctrl+Shift+L"
-            },
-            "description": "Toggle feature language"
-        },
-        "toggle-feature-quick-nav": {
-            "suggested_key": {
-                "default": "Ctrl+Shift+O"
-            },
-            "description": "Toggle feature quick navigation"
-        },
         "_execute_browser_action": {
-            "suggested_key": {
-                "windows": "Ctrl+Shift+Y",
-                "mac": "Command+Shift+Y",
-                "chromeos": "Ctrl+Shift+U",
-                "linux": "Ctrl+Shift+J"
-            }
+          "suggested_key": {
+            "windows": "Ctrl+Shift+Y",
+            "mac": "Command+Shift+Y",
+            "chromeos": "Ctrl+Shift+U",
+            "linux": "Ctrl+Shift+J"
+          }
         }
-    },
+      },
     "permissions": [
         "tabs",
         "activeTab",

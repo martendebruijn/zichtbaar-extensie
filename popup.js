@@ -392,20 +392,20 @@ function sendTabTasks(msg, btn, startingId) {
     }
   );
 }
-const detectAudioEl = document.getElementById('detectAudioEl'); // get UI button
-detectAudioEl.addEventListener('click', detectAudio); // fire detectAudio() when clicked
+// const detectAudioEl = document.getElementById('detectAudioEl'); // get UI button
+// detectAudioEl.addEventListener('click', detectAudio); // fire detectAudio() when clicked
 
-function detectAudio() {
-  chrome.tabs.query({ windowId: chrome.windows.WINDOW_ID_Current }, (tabs) => {
-    // get all tabs of the active window
-    tabs.forEach(function (tab) {
-      // loop over all tabs
-      console.log({
-        title: tab.title,
-        audio: tab.audible,
-        // icon: favIconUrl, // not every tab has a favIconUrl (FE: chrome://extensions)
-        id: tab.id,
-      });
-    });
-  });
-}
+// function detectAudio() {
+//   chrome.tabs.query({ windowId: chrome.windows.WINDOW_ID_Current }, (tabs) => {
+//     // get all tabs of the active window
+//     tabs.forEach(function (tab) {
+//       // loop over all tabs
+//       console.log({
+//         title: tab.title,
+//         audio: tab.audible,
+//         // icon: favIconUrl, // not every tab has a favIconUrl (FE: chrome://extensions)
+//         id: tab.id,
+//       });
+//     });
+//   });
+// }
